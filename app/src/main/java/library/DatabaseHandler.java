@@ -1,13 +1,10 @@
 package library;
 
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import java.util.HashMap;
 
 import java.util.HashMap;
 /**
@@ -25,8 +22,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_USER = "user";
 
     //User Table Columns namse
-    private static final String KEY_ID = "username";
-    private static final String KEY_password = "passwd";
+
+    private static final String KEY_USERNAME = "username";
+    private static final String KEY_PASWWORD = "password";
+    private static final String KEY_CREATED_AT = "created_at";
 
     public DatabaseHandler(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -39,6 +38,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Todo: Don't know yet! but use for create the user schedule
+        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
+                + KEY_USERNAME + " PRIMARY KEY,"
+                + KEY_CREATED_AT + " TEXT" + ")";
+        db.execSQL(CREATE_LOGIN_TABLE);
     }
 
     /**
@@ -50,19 +53,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Todo: Don't know yet! http://www.learn2crack.com/2013/08/develop-android-login-registration-with-php-mysql.html/3
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+
+        // Create tables again
+        onCreate(db);
     }
 
     /**
      * Add the user information into AWS database
      * @param username username
-     * @param passwd password
+     * @param createdAt register created time
      */
-    public void addUser(String username, String passwd){
+    public void addUser(String username, String createdAt){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(KEY_ID,username);    //Username
-        values.put(KEY_password,passwd);    //Password
+        values.put(KEY_USERNAME,username);      //Username
+        values.put(KEY_PASWWORD,createdAt);      //Created At
+        //values.put(KEY_PASWWORD,password);    //Password
 
         //Inserting Row
         db.insert(TABLE_USER,null,values);
@@ -73,8 +82,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Getting user data from AWS database
      * @return  return user information with username and password
      */
-    public HashMap getUserDetails(){
-        HashMap user = new HashMap();
+    public HashMap<String, String> getUserDetails(){
+        HashMap<String,String> user = new HashMap<String,String>();
         String selectQuery = "SELECT  * FROM " + TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -84,7 +93,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
             user.put("username",cursor.getString(1));
-            user.put("passwd",cursor.getString(2));
+            //user.put("password",cursor.getString(2));
+            user.put("created_at",cursor.getString(2));
         }
         cursor.close();
         db.close();

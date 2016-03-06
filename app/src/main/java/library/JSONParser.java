@@ -23,16 +23,16 @@ import android.util.Log;
  * Used to parse to JSON response which is send to the server and received from the server.
  */
 public class JSONParser {
-    static InputStream is = null;
+    static InputStream input = null;
     static JSONObject jObj = null;
-    static String json = "";
+    static String jsonString = "";
 
     // constructor
     public JSONParser() {
 
     }
 
-    public JSONObject getJSONFromUrl(String url, List params) {
+    public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) {
 
         // Making HTTP request
         try {
@@ -43,7 +43,7 @@ public class JSONParser {
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
             HttpEntity httpEntity = httpResponse.getEntity();
-            is = httpEntity.getContent();
+            input = httpEntity.getContent();
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -55,22 +55,22 @@ public class JSONParser {
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
+                    input, "iso-8859-1"), 8);
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "n");
+                sb.append(line + "\n");
             }
-            is.close();
-            json = sb.toString();
-            Log.e("JSON", json);
+            input.close();
+            jsonString = sb.toString(); Log.i("JSON", jsonString);
+            Log.e("JSON", jsonString);
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
 
         // try parse the string to a JSON object
         try {
-            jObj = new JSONObject(json);
+            jObj = new JSONObject(jsonString);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }

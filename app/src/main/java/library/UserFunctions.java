@@ -1,11 +1,13 @@
 package library;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-import android.content.Context;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by SpringRoll on 1/5/2016.
@@ -13,8 +15,8 @@ import android.content.Context;
 public class UserFunctions {
     private JSONParser jsonParser;
     //URL of the PHP API
-    private static String loginURL = "";
-    private static String registerURL = "";
+    private static String loginURL = "http://152.117.180.231/webapp/";
+    private static String registerURL = "http://152.117.180.231/webapp/";
 
     private static String login_tag = "login";
     private static String register_tag = "register";
@@ -27,15 +29,15 @@ public class UserFunctions {
     /**
      * Function to Login
      * @param username username
-     * @param passwd password
+     * @param password password
      * @return return the json object with username and password
      */
-    public JSONObject loginUser(String username, String passwd){
+    public JSONObject loginUser(String username, String password){
         // Building Parameters
-        List params = new ArrayList();
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", login_tag));
         params.add(new BasicNameValuePair("username", username));
-        params.add(new BasicNameValuePair("password", passwd));
+        params.add(new BasicNameValuePair("password", password));
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         return json;
     }
@@ -43,15 +45,15 @@ public class UserFunctions {
     /**
      * Function to  Register
      * @param username username
-     * @param passwd password
+     * @param password password
      * @return return the json object with username and password
      */
-    public JSONObject registerUser(String username, String passwd){
+    public JSONObject registerUser(String username, String password){
         // Building Parameters
-        List params = new ArrayList();
+        List <NameValuePair> params= new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", register_tag));
         params.add(new BasicNameValuePair("username", username));
-        params.add(new BasicNameValuePair("password", passwd));
+        params.add(new BasicNameValuePair("password", password));
         JSONObject json = jsonParser.getJSONFromUrl(registerURL,params);
         return json;
     }
