@@ -20,7 +20,16 @@
         <FrameLayout
             android:id="@+id/main_fragment_container"
             android:layout_width="match_parent" android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1" >
+        </FrameLayout>
+
+        <CalendarView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/calendarView2"
+            android:layout_gravity="center_horizontal|top" />
+
+
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
