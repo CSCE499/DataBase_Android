@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -34,13 +35,11 @@ import library.UserFunctions;
  */
 public class RegisterActivity extends Activity {
     private final static String LOG_TAG = RegisterActivity.class.getSimpleName();
+    //private final CountDownLatch timeoutLatch = new CountDownLatch(2);
     /**
      * JSON Response node names.
      **/
     private static String KEY_SUCCESS = "success";
-    private static String KEY_USERNAME = "username";
-    private static String KEY_PASSWORD = "password";
-    private static String KEY_CREATE_AT = "created";
     private static String KEY_ERROR = "error";
 
     /**
@@ -51,7 +50,8 @@ public class RegisterActivity extends Activity {
     private TextView mError;
     private Button mSignUpButton;
     private NetCheck mAuthTask = null;
-
+    private UserFunctions functionsManager;
+    private DatabaseHandler db;
     /**
      * Called when the activity is first created.
      */
@@ -72,6 +72,14 @@ public class RegisterActivity extends Activity {
                 AttemptRegister(v);
             }
         });
+        //timeoutLatch.countDown();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Touch event bypasses waiting for the splash timeout to expire.
+        //timeoutLatch.countDown();
+        return true;
     }
 
     /**
@@ -272,8 +280,8 @@ public class RegisterActivity extends Activity {
         @Override
         protected JSONObject doInBackground(String... args) {
 
-            UserFunctions userFunction = new UserFunctions();
-            JSONObject json = userFunction.registerUser(username, password);
+            functionsManager = new UserFunctions(getApplicationContext());
+            JSONObject json = functionsManager.registerUser(username, password);
 
             return json;
         }
@@ -294,31 +302,26 @@ public class RegisterActivity extends Activity {
                     if(Integer.parseInt(res) == 1){
                         pDialog.setTitle("Getting Data");
                         pDialog.setMessage("Loading Info");
-
                         mError.setText("Successfully Registered");
-
-
-                        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                        JSONObject json_user = json.getJSONObject("user");
 
                         /**
                          * Removes all the previous data in the SQlite database
                          **/
+                        functionsManager.logoutUser();
 
-                        UserFunctions logout = new UserFunctions();
-                        logout.logoutUser(getApplicationContext());
-                        db.addUser(json_user.getString(KEY_USERNAME),json_user.getString(KEY_CREATE_AT));
                         /**
-                         * Stores registered data in SQlite Database
                          * Launch Registered screen
                          **/
-
                         Intent signIn = new Intent(getApplicationContext(), SignInActivity.class);
+
                         /**
                          * Close all views before launching Registered screen
                          **/
                         signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
+
+
+
                         startActivity(signIn);
                         /**
                          * Close Register Screen
