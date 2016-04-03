@@ -5,13 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.HashMap;
 /**
  * Created by SpringRoll on 1/5/2016.
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-
+    private final static String LOG_TAG = DatabaseHandler.class.getSimpleName();
     //Database version
     private static final int DATABASE_VERSION = 1;
 
@@ -37,6 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(LOG_TAG, "onCreate");
         //Todo: Don't know yet! but use for create the user schedule
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
                 + KEY_USERNAME + " PRIMARY KEY,"
@@ -52,6 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(LOG_TAG, "onUpgrader");
         //Todo: Don't know yet! http://www.learn2crack.com/2013/08/develop-android-login-registration-with-php-mysql.html/3
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
@@ -92,9 +95,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //Move to first row
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
-            user.put("username",cursor.getString(1));
+            user.put("username",cursor.getString(0));
             //user.put("password",cursor.getString(2));
-            user.put("created_at",cursor.getString(2));
+            user.put("created_at",cursor.getString(1));
         }
         cursor.close();
         db.close();
@@ -120,6 +123,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Delete all tables and creatte them again
      */
     public void resetTables(){
+        Log.d(LOG_TAG, "logoutUser");
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_USER, null, null);

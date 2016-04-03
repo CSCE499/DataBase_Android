@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.springroll.database.SignIn.SignInActivity;
+
 import java.util.concurrent.CountDownLatch;
+
+import library.DatabaseHandler;
+import library.UserFunctions;
 
 /**
  * Created by SpringRoll on 1/28/2016.
@@ -14,7 +19,9 @@ import java.util.concurrent.CountDownLatch;
 public class SplashActivity extends Activity{
     private final static String LOG_TAG = SplashActivity.class.getSimpleName();
     private final CountDownLatch timeoutLatch = new CountDownLatch(1);
-    //private S
+    UserFunctions functionsManager;
+    DatabaseHandler db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,22 +30,17 @@ public class SplashActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        //signInManager = new SignInManager(this);
+        functionsManager = new UserFunctions(this);
+        db = new DatabaseHandler(this);
 
         final Thread thread = new Thread(new Runnable() {
             public void run() {
-                /*final SignInProvider provider = signInManager.getPreviouslySignedInProvider();
-
-                // if the user was already previously in to a provider.
-                if (provider != null) {
-                    // asyncronously handle refreshing credentials and call our handler.
-                    signInManager.refreshCredentialsWithProvider(SplashActivity.this,
-                            provider, new SignInResultsHandler());
-                } else {
-                    // Asyncronously go to the main activity (after the splash delay has expired).
+                String provider = db.getUserDetails().get("username");
+                if(provider != null){
+                    Log.i("SplashActivity", provider);
                     goMain();
-                }*/
-                goSignIn();
+                }else
+                    goSignIn();
                 // Wait for the splash timeout.
                 try {
                     Thread.sleep(2000);
@@ -90,7 +92,7 @@ public class SplashActivity extends Activity{
      */
     protected void goMain() {
         Log.d(LOG_TAG, "Launching Main Activity...");
-        goAfterSplashTimeout(new Intent(this, MainActivity.class));
+        goAfterSplashTimeout(new Intent(this, BasicActivity.class));
     }
 
     /**

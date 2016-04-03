@@ -1,6 +1,7 @@
 package library;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -13,7 +14,11 @@ import java.util.List;
  * Created by SpringRoll on 1/5/2016.
  */
 public class UserFunctions {
+    private final static String LOG_TAG = UserFunctions.class.getSimpleName();
     private JSONParser jsonParser;
+    private static UserFunctions singleton = null;
+    private Context context = null;
+    private DatabaseHandler db;
     //URL of the PHP API
     private static String loginURL = "http://152.117.180.231/webapp/";
     private static String registerURL = "http://152.117.180.231/webapp/";
@@ -21,10 +26,27 @@ public class UserFunctions {
     private static String login_tag = "login";
     private static String register_tag = "register";
 
-    // constructor
-    public UserFunctions(){
+    /**
+     * Constructor.
+     * @param context context.
+     */
+    public UserFunctions(final Context context){
+        assert (singleton ==null);
+        singleton = this;
+        this.context = context.getApplicationContext();
+
+        db = new DatabaseHandler(context);
         jsonParser = new JSONParser();
     }
+
+    /**
+     * Gets the singleton instance of this class.
+     * @return instance
+     */
+    public synchronized static UserFunctions getUserFunctionManager() {
+        return singleton;
+    }
+
 
     /**
      * Function to Login
@@ -61,11 +83,11 @@ public class UserFunctions {
     /**
      * Function to logout user
      * Resets the temporary data stored in SQLite Database
-     * @param context
+     * @param
      * @return
      */
-    public boolean logoutUser(Context context){
-        DatabaseHandler db = new DatabaseHandler(context);
+    public boolean logoutUser(){
+        Log.d(LOG_TAG, "logoutUser");
         db.resetTables();
         return true;
     }

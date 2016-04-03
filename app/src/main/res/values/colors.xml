@@ -9,5 +9,15 @@
     <color name="splash_background">#FFFFFF</color>
     <color name="main_background">#FFFFFF</color>
     <color name="authentication_background">#e0ec5f</color>
+    <color name="nav_drawer_background">#FFFFFF</color>
+    <color name="nav_drawer_top_background">#CCCCCC</color>
+    <color name="nav_drawer_no_user_background">#AAAAAA</color>
     <color name="error">#f90202</color>
+    <color name="event_color_01">#59dbe0</color>
+    <color name="event_color_02">#f57f68</color>
+    <color name="event_color_03">#87d288</color>
+    <color name="event_color_04">#f8b552</color>
+    <color name="toolbar">#e9e574</color>
+    <color name="toolbar_text">#8f000000</color>
+    <color name="accent">#2789e4</color>
 </resources>
