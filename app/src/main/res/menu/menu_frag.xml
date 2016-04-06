@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/save_event"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Yes"
+        android:orderInCategory="10"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/cancel_event"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="Cancel"
+        android:orderInCategory="10"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/delete_event"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="Delete"
+        android:orderInCategory="10"
+        app:showAsAction="never"/>
+
+</menu>
