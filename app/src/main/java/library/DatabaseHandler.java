@@ -73,7 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(KEY_USERNAME,username);      //Username
-        values.put(KEY_PASWWORD,createdAt);      //Created At
+        values.put(KEY_CREATED_AT,createdAt);      //Created At
         //values.put(KEY_PASWWORD,password);    //Password
 
         //Inserting Row

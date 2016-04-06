@@ -1,6 +1,7 @@
 package com.example.springroll.database;
 
 import android.app.Fragment;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
@@ -35,11 +36,11 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
 
     private boolean mSave = false;
     private WeekViewEvent mEvent;
-    private Button mStartDate, mEndDate, mStartTime,mEndTime;
+    private Button mStartDateButton, mEndDateButton;
     private EditText mTitle, mLocation;
     private Switch mAllDaySwitch;
     private Calendar calendar, mFromDate, mToDate;
-    private int year, month, day, hour,minute,am_pm = -1;
+    private int year, month, day, hour,minute,am_pm = -2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,8 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH)+1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        hour = calendar.get(Calendar.HOUR);
         minute = calendar.get(Calendar.MINUTE);
-        if(hour >= 12){
-            am_pm = 1;
-        }
         //showDate(year, month+1, day);
     }
 
@@ -99,79 +97,79 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
             }
         });
 
-        mStartDate = (Button)v.findViewById(R.id.start_date_button);
-        mStartDate.setText(new StringBuilder().append(month).append("/").append(day).append("/").append(year));
-        mStartDate.setOnClickListener(new View.OnClickListener() {
+        mStartDateButton = (Button)v.findViewById(R.id.start_date_button);
+        mStartDateButton.setText(setString(am_pm, mStartDateButton));
+        mStartDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDatePicker(mStartDate,mFromDate);
-                //DateTimePickerDialog pickerDialog = new DateTimePickerDialog(this, false, this);
-                //pickerDialog.show();
-                showDateTimeDialog();
+                mFromDate.set(year, month, day, hour, minute);
+                mEvent.setStartTime(mFromDate);
+                showDateTimeDialog(mStartDateButton, am_pm);
+                if(mFromDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
+                    mSave = false;
+                    mStartDateButton.setPaintFlags(mStartDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }else{
+                    mSave = true;
+                    mStartDateButton.setPaintFlags(0);
+                }
             }
         });
-        /*fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mStartDate.setText(new StringBuilder().append(monthOfYear).append("/").append(dayOfMonth).append("/").append(year));
-                mFromDate.set(year, monthOfYear, dayOfMonth);
 
-            }
-        });
-        */
-
-
-
-
-
-        mEndDate = (Button)v.findViewById(R.id.end_date_button);
-        mEndDate.setText(new StringBuilder().append(month).append("/").append(day).append("/").append(year));
-        mEndDate.setOnClickListener(new View.OnClickListener() {
+        mEndDateButton = (Button)v.findViewById(R.id.end_date_button);
+        mEndDateButton.setText(setString(am_pm,mEndDateButton));
+        mEndDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDatePicker(mEndDate,mToDate);
+                mToDate.set(year, month, day, hour, minute);
+                mEvent.setStartTime(mToDate);
+                showDateTimeDialog(mEndDateButton, am_pm);
+                if(mToDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
+                    mSave = false;
+                    mEndDateButton.setPaintFlags(mEndDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }else{
+                    mSave = true;
+                    mEndDateButton.setPaintFlags(0);
+                }
             }
         });
-
-        //mStartTime = (Button)v.findViewById(R.id.start_time_button);
-
-        //mEndTime = (Button)v.findViewById(R.id.end_time_button);
-
 
         mAllDaySwitch = (Switch)v.findViewById(R.id.switch1);
         mAllDaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    am_pm = 2;
                     mEvent.setAllDay(true);
-                    //RelativeLayout.LayoutParams param1 = (RelativeLayout.LayoutParams) mStartDate.getLayoutParams();
-                    //param1.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                   // mStartDate.setLayoutParams(param1);
-                    //mStartTime.setVisibility(View.GONE);
-                   // RelativeLayout.LayoutParams param2 = (RelativeLayout.LayoutParams) mEndDate.getLayoutParams();
-                   // param2.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                   // mEndDate.setLayoutParams(param2);
-                    //mEndTime.setVisibility(View.GONE);
-
+                    mStartDateButton.setText(setString(am_pm,mStartDateButton));
+                    mEndDateButton.setText(setString(am_pm,mEndDateButton));
                 }else{
-                    //mEvent.setAllDay(false);
-                    //RelativeLayout.LayoutParams param1 = (RelativeLayout.LayoutParams) mStartDate.getLayoutParams();
-                    //param1.width = 350;
-                    //mStartDate.setLayoutParams(param1);
-                    //mStartTime.setVisibility(View.VISIBLE);
-                    //RelativeLayout.LayoutParams param2 = (RelativeLayout.LayoutParams) mEndDate.getLayoutParams();
-                    //param2.width = 350;
-                    //mEndDate.setLayoutParams(param2);
-                    //mEndTime.setVisibility(View.VISIBLE);
+                    am_pm = -2;
+                    mEvent.setAllDay(false);
+                    mStartDateButton.setText(setString(am_pm,mStartDateButton));
+                    mEndDateButton.setText(setString(am_pm,mEndDateButton));
                 }
             }
         });
         return v;
     }
 
-    private void showDateTimeDialog() {
+    public StringBuilder setString(int am_pm,Button b){
+        StringBuilder text;
+        if(am_pm == 2){
+            text = new StringBuilder().append(month).append("/").append(day).append("/").append(year);
+        }
+        else if(am_pm != -1 && b.getId() == R.id.start_date_button){
+            text = new StringBuilder().append(month).append("/").append(day).append("/").append(year).append("  -  ").append(hour).append(":").append(minute).append(" ").append(am_pm == Calendar.AM ? "AM" : "PM");
+        }else{
+            text = new StringBuilder().append(month).append("/").append(day).append("/").append(year).append("  -  ").append(hour+1).append(":").append(minute).append(" ").append(am_pm == Calendar.AM ? "AM" : "PM");
+        }
+        return text;
+    }
+
+    private void showDateTimeDialog(Button b, int am_pm) {
         DateTimePickerDialog pickerDialog = new DateTimePickerDialog(getActivity(), false, this);
         pickerDialog.show();
+        b.setText(setString(am_pm,b));
     }
 
     @Override
@@ -210,72 +208,16 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
 
     @Override
     public void onDateTimeSelected(int year, int month, int day, int hour, int min, int am_pm) {
-
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.hour = hour;
+        this.minute = min;
+        this.am_pm = am_pm;
+        //String text = day + "/" + month + "/" + year + " - " + hour + ":" + min;
+       // if (am_pm != -1)
+            //text = text + (am_pm == Calendar.AM ? "AM" : "PM");
     }
-
-
-
-    //////////////////////////////////////
-    //
-    //      DatePickerDialog
-    //      & TimePickerDialog
-    //
-    ////////////////////////////////////////
-
-    /*
-    private void showDatePicker(final Button b, final Calendar mCal){
-        DateTimePickerFragment date = new DateTimePickerFragment();
-        DatePickerDialog.OnDateSetListener ondate = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                b.setText(new StringBuilder().append(monthOfYear+1).append("/").append(dayOfMonth).append("/").append(year));
-                mCal.set(year,monthOfYear+1,dayOfMonth);
-            }
-        };
-        Bundle args = new Bundle();
-        args.putInt("year", calendar.get(Calendar.YEAR));
-        args.putInt("month", calendar.get(Calendar.MONTH));
-        args.putInt("day", calendar.get(Calendar.DAY_OF_MONTH));
-        date.setArguments(args);
-        date.setCallBack(ondate);
-        date.show(getFragmentManager(),"Date Picker");
-
-    }
-
-    private void showTimePicker(final Bundle b, final Calendar mcal){
-        DateTimePickerFragment date = new DateTimePickerFragment();
-    }
-
-    public static class DateTimePickerFragment extends DialogFragment{
-        DatePickerDialog.OnDateSetListener onDateSet;
-        TimePickerDialog.OnTimeSetListener onTimeSet;
-        private int year,month,day;
-        private int hour,minute;
-
-        public DateTimePickerFragment(){}
-
-        public void setCallBack(DatePickerDialog.OnDateSetListener ondate){
-            onDateSet = ondate;
-        }
-
-        @Override
-        public void setArguments(Bundle args) {
-            super.setArguments(args);
-            year = args.getInt("year");
-            month = args.getInt("month");
-            day = args.getInt("day");
-            hour = args.getInt("hour");
-            minute = args.getInt("minute");
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new DatePickerDialog(getActivity(),onDateSet,year,month,day);
-        }
-    }
-    */
-
-
 
 }
 

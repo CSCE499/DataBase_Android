@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import library.CalendarAPI.WeekViewEvent;
+import library.UserFunctions;
 
 /**
  * A basic example of how to use week view library.
@@ -13,6 +14,7 @@ import library.CalendarAPI.WeekViewEvent;
  */
 public class BasicActivity extends BaseActivity {
 
+    private UserFunctions mFunction;
     /**
     private static BasicActivity sEventActivity;
     private Context mAppContext;
@@ -55,7 +57,7 @@ public class BasicActivity extends BaseActivity {
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
-
+        mFunction = new UserFunctions(getApplicationContext());
         List<WeekViewEvent> mEvents = new ArrayList<WeekViewEvent>();
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 3);
