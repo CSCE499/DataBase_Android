@@ -1,5 +1,7 @@
 package com.example.springroll.database;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import library.CalendarAPI.DateTimePickerDialog;
 import library.CalendarAPI.WeekViewEvent;
@@ -26,6 +29,8 @@ import library.CalendarAPI.WeekViewEvent;
  * Created by SpringRoll on 3/30/2016.
  */
 public class EventActivity extends Fragment implements DateTimePickerDialog.DateTimeListener{
+
+    public static final String EXTRA_EVENT_ID = "com.example.springroll.databse.event_id";
     public WeekViewEvent getmEvent() {
         return mEvent;
     }
@@ -34,7 +39,7 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
         this.mEvent = mEvent;
     }
 
-    private boolean mSave = false;
+    private boolean mSave = false, mAllDay = false;
     private WeekViewEvent mEvent;
     private Button mStartDateButton, mEndDateButton;
     private EditText mTitle, mLocation;
@@ -42,26 +47,41 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
     private Calendar calendar, mFromDate, mToDate;
     private int year, month, day, hour,minute,am_pm = -2;
 
+    public static EventActivity newInstance(UUID eventId){
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_EVENT_ID,eventId);
+
+        EventActivity fragment = new EventActivity();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mEvent = new WeekViewEvent();
+       // UUID eventId = (UUID)getActivity().getIntent().getSerializableExtra(EXTRA_EVENT_ID);
+        UUID eventId = (UUID)getArguments().getSerializable(EXTRA_EVENT_ID);
+        mEvent = BasicActivity.get(getActivity()).getmEvents(eventId); //Need to fix this one
 
-        mFromDate = mToDate = calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH)+1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
         hour = calendar.get(Calendar.HOUR);
         minute = calendar.get(Calendar.MINUTE);
         //showDate(year, month+1, day);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_fragment_event,container,false);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mTitle = (EditText)v.findViewById(R.id.event_title);
+        mTitle.setText(mEvent.getName());
         mTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -80,6 +100,7 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
         });
 
         mLocation = (EditText)v.findViewById(R.id.event_location);
+        mLocation.setText(mEvent.getLocation());
         mLocation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -98,13 +119,14 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
         });
 
         mStartDateButton = (Button)v.findViewById(R.id.start_date_button);
-        mStartDateButton.setText(setString(am_pm, mStartDateButton));
+        mStartDateButton.setText(setString(am_pm, mStartDateButton, mAllDay));
         mStartDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showDateTimeDialog(mStartDateButton, am_pm);
+                mFromDate = Calendar.getInstance();
                 mFromDate.set(year, month, day, hour, minute);
                 mEvent.setStartTime(mFromDate);
-                showDateTimeDialog(mStartDateButton, am_pm);
                 if(mFromDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
                     mSave = false;
                     mStartDateButton.setPaintFlags(mStartDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -116,13 +138,14 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
         });
 
         mEndDateButton = (Button)v.findViewById(R.id.end_date_button);
-        mEndDateButton.setText(setString(am_pm,mEndDateButton));
+        mEndDateButton.setText(setString(am_pm, mEndDateButton, mAllDay));
         mEndDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showDateTimeDialog(mEndDateButton, am_pm);
+                mToDate = Calendar.getInstance();
                 mToDate.set(year, month, day, hour, minute);
                 mEvent.setStartTime(mToDate);
-                showDateTimeDialog(mEndDateButton, am_pm);
                 if(mToDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
                     mSave = false;
                     mEndDateButton.setPaintFlags(mEndDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -138,24 +161,24 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    am_pm = 2;
+                    mAllDay = true;
                     mEvent.setAllDay(true);
-                    mStartDateButton.setText(setString(am_pm,mStartDateButton));
-                    mEndDateButton.setText(setString(am_pm,mEndDateButton));
+                    mStartDateButton.setText(setString(am_pm,mStartDateButton,mAllDay));
+                    mEndDateButton.setText(setString(am_pm,mEndDateButton,mAllDay));
                 }else{
-                    am_pm = -2;
+                    mAllDay = false;
                     mEvent.setAllDay(false);
-                    mStartDateButton.setText(setString(am_pm,mStartDateButton));
-                    mEndDateButton.setText(setString(am_pm,mEndDateButton));
+                    mStartDateButton.setText(setString(am_pm,mStartDateButton,mAllDay));
+                    mEndDateButton.setText(setString(am_pm,mEndDateButton,mAllDay));
                 }
             }
         });
         return v;
     }
 
-    public StringBuilder setString(int am_pm,Button b){
+    public StringBuilder setString(int am_pm,Button b,Boolean mAllDay){
         StringBuilder text;
-        if(am_pm == 2){
+        if(mAllDay == true){
             text = new StringBuilder().append(month).append("/").append(day).append("/").append(year);
         }
         else if(am_pm != -1 && b.getId() == R.id.start_date_button){
@@ -169,7 +192,7 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
     private void showDateTimeDialog(Button b, int am_pm) {
         DateTimePickerDialog pickerDialog = new DateTimePickerDialog(getActivity(), false, this);
         pickerDialog.show();
-        b.setText(setString(am_pm,b));
+        b.setText(setString(am_pm,b,mAllDay));
     }
 
     @Override
@@ -217,6 +240,43 @@ public class EventActivity extends Fragment implements DateTimePickerDialog.Date
         //String text = day + "/" + month + "/" + year + " - " + hour + ":" + min;
        // if (am_pm != -1)
             //text = text + (am_pm == Calendar.AM ? "AM" : "PM");
+    }
+
+    public static class DateTimePickerFragment extends DialogFragment implements DateTimePickerDialog.DateTimeListener {
+        private int year,month,day,am_pm;
+        private int hour,minute;
+        DateTimePickerDialog.DateTimeListener onDateSet;
+
+        public DateTimePickerFragment(){}
+
+        public void setCallBack(DateTimePickerDialog.DateTimeListener ondate){
+            onDateSet = ondate;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new DateTimePickerDialog(getActivity(),false,this);
+        }
+
+        @Override
+        public void setArguments(Bundle args) {
+            super.setArguments(args);
+            year = args.getInt("year");
+            month = args.getInt("month");
+            day = args.getInt("day");
+            hour = args.getInt("hour");
+            minute = args.getInt("minute");
+        }
+
+        @Override
+        public void onDateTimeSelected(int year, int month, int day, int hour, int min, int am_pm) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+            this.hour = hour;
+            this.minute = min;
+            this.am_pm = am_pm;
+        }
     }
 
 }

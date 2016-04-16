@@ -164,8 +164,8 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
 
             //Menu option add event
             case R.id.action_add_event:
-                Intent addEvent = new Intent(getApplicationContext(),EventActivity.class);
-                addEvent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Intent addEvent = new Intent(getActivity(),EventActivity.class);
+                //addEvent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(addEvent);
                 return true;
 

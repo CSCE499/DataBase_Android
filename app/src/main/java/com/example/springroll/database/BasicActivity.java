@@ -1,5 +1,7 @@
 package com.example.springroll.database;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -15,10 +17,11 @@ import library.UserFunctions;
 public class BasicActivity extends BaseActivity {
 
     private UserFunctions mFunction;
-    /**
+
     private static BasicActivity sEventActivity;
     private Context mAppContext;
     private List<WeekViewEvent> mEvents;
+
 
     private BasicActivity(Context context){
         mAppContext = context;
@@ -53,7 +56,12 @@ public class BasicActivity extends BaseActivity {
             }
         } return null;
     }
-    */
+
+
+     @Override public void onResume(){
+         super.onResume();
+     }
+
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
