@@ -33,6 +33,7 @@ public class SplashActivity extends Activity{
         functionsManager = new UserFunctions(this);
         db = new DatabaseHandler(this);
 
+        /**
         final Thread thread = new Thread(new Runnable() {
             public void run() {
                 String provider = db.getUserDetails().get("username");
@@ -50,7 +51,9 @@ public class SplashActivity extends Activity{
                 timeoutLatch.countDown();
             }
         });
-        thread.start();
+        thread.start();*/
+        goMain();
+
     }
 
     @Override

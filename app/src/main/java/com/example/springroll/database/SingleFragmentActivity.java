@@ -14,13 +14,13 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_eventFrag);
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        setContentView(R.layout.activity_event_frag);
+        FragmentManager fm = getFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.frag_container);
         if(fragment == null){
             //fragment = new EventActivity();
             fragment = createdFragment();
-            fm.beginTransaction().add(R.id.fragmentContainer,fragment).commit();
+            fm.beginTransaction().add(R.id.frag_container,fragment).commit();
         }
     }
 }

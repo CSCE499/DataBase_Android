@@ -1,11 +1,9 @@
 package com.example.springroll.database;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +27,7 @@ import library.UserFunctions;
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
  * Website: http://alamkanak.github.io
  */
-public abstract class BaseActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
+public abstract class BaseActivity extends SingleFragmentActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
@@ -40,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calander_base);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,18 +68,22 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         setupDateTimeInterpreter(false);
 
 
-
+        /*
         //FragmentManager for the calendar event
         FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        Fragment fragment = fm.findFragmentById(R.id.frag_container);
         if(fragment == null){
-            fragment = new EventActivity();
+            fragment = new EventActivity(); // This is might be the local variable and display on the array adpter
             //fragment = createdFragment();
-            fm.beginTransaction().add(R.id.fragmentContainer,fragment).commit();
-        }
+            fm.beginTransaction().add(R.id.frag_container,fragment).commit();
+        }*/
     }
 
-
+    @Override
+    protected Fragment createdFragment() {
+        long eventId = (long)getIntent().getSerializableExtra(EventActivity.EXTRA_EVENT_ID);
+        return new EventActivity().newInstance(eventId);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
@@ -164,9 +166,9 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
 
             //Menu option add event
             case R.id.action_add_event:
-                Intent addEvent = new Intent(getActivity(),EventActivity.class);
+                //Intent addEvent = new Intent(getActivity(),EventActivity.class);
                 //addEvent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(addEvent);
+                //startActivity(addEvent);
                 return true;
 
         }

@@ -5,6 +5,7 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,7 +28,7 @@ public class EventListFragment extends ListFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.title);
-        mEvent = BasicActivity.get(getActivity()).getmEvents();
+        mEvent = CalEventManager.get(getActivity()).getmEvents();
 
         EventAdapter adapter = new EventAdapter(mEvent);
         setListAdapter(adapter);
@@ -40,7 +41,7 @@ public class EventListFragment extends ListFragment{
         Log.d(TAG, e.getName() + " was clicked");
 
         Intent i = new Intent(getActivity(),BasicActivity.class);
-        i.putExtra(EventActivity.EXTRA_EVENT_ID,e.getId());
+        i.putExtra(EventActivity.EXTRA_EVENT_ID, e.getId());
         startActivity(i);
     }
 
@@ -49,19 +50,36 @@ public class EventListFragment extends ListFragment{
         public EventAdapter(List<WeekViewEvent> e){
             super(getActivity(),0,e);
         }
+
+        @Override
+        public View getView(int posistion, View convertView, ViewGroup parent) {
+            if(convertView == null){
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_event,null);
+            }
+
+            //Configure the view for this event
+            WeekViewEvent e = getItem(posistion);
+
+            TextView title = (TextView)convertView.findViewById(R.id.event_list_titleTextView);
+            return convertView;
+        }
     }
 
     @Override
-    public View getView(int posistion, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_event,null);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case  R.id.action_add_event:
+                WeekViewEvent e = new WeekViewEvent();
+                CalEventManager.get(getActivity()).addEvent(e);
+                Intent i = new Intent(getActivity(),BaseActivity.class);
+                i.putExtra(EventActivity.EXTRA_EVENT_ID,e.getId());
+                startActivityForResult(i,0);
+                return true;
         }
-        //WeekViewEvent e = getSelectedItemPosition();
-        TextView title = (TextView)convertView.findViewById(R.id.event_list_titleTextView);
-        return convertView;
+        return super.onOptionsItemSelected(item);
     }
 
-     @Override public void onResume(){
+    @Override public void onResume(){
          super.onResume();
          ((EventAdapter)getListAdapter()).notifyDataSetChanged();
      }
