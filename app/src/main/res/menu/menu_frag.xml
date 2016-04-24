@@ -5,20 +5,25 @@
     <item
         android:id="@+id/save_event"
         android:icon="@android:drawable/ic_menu_save"
-        android:title="Yes"
+        android:title="@string/fragment_save"
         android:orderInCategory="10"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/cancel_event"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
-        android:title="Cancel"
+        android:title="@string/fragment_cancel"
         android:orderInCategory="10"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/delete_event"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="Delete"
+        android:title="@string/fragment_delete"
         android:orderInCategory="10"
-        app:showAsAction="never"/>
+        app:showAsAction="never|withText"/>
+
+    <!--item
+        android:id="@+id/menu_item_show_subtitle"
+        android:title="@string/show_subtitle"
+        app:showAsAction="ifRoom"/-->
 
 </menu>

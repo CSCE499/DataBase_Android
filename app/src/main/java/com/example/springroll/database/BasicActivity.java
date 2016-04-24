@@ -1,13 +1,10 @@
 package com.example.springroll.database;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import library.CalendarAPI.WeekViewEvent;
-import library.UserFunctions;
+import library.calendarAPI.WeekViewEvent;
 
 /**
  * A basic example of how to use week view library.
@@ -16,6 +13,7 @@ import library.UserFunctions;
  */
 public class BasicActivity extends BaseActivity {
 
+    /*
     private UserFunctions mFunction;
 
     private static BasicActivity sEventActivity;
@@ -56,7 +54,7 @@ public class BasicActivity extends BaseActivity {
             }
         } return null;
     }
-
+*/
 
      @Override public void onResume(){
          super.onResume();
@@ -65,7 +63,7 @@ public class BasicActivity extends BaseActivity {
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
-        mFunction = new UserFunctions(getApplicationContext());
+       // mFunction = new UserFunctions(getApplicationContext());
         List<WeekViewEvent> mEvents = new ArrayList<WeekViewEvent>();
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 3);

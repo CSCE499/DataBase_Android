@@ -35,4 +35,12 @@
     <string name="spinner_repeat_title">Repeat</string>
     <string name="reset_button">Reset</string>
     <string name="cancel_button">Cancel</string>
+    <string name="menu_new_event">Add Event</string>
+
+
+    <!-- fragment Menu List -->
+    <string name="fragment_save">Save</string>
+    <string name="fragment_delete">Delete</string>
+    <string name="fragment_cancel">Cancel</string>
+    <string name="show_subtitle">#####</string>
 </resources>

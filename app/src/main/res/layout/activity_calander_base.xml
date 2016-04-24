@@ -9,7 +9,7 @@
         android:background="#fff">
 
 
-    <library.CalendarAPI.WeekView
+    <library.calendarAPI.WeekView
         android:id="@+id/weekView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

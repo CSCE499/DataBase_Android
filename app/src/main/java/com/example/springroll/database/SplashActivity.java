@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.example.springroll.database.SignIn.SignInActivity;
+import com.example.springroll.database.signInUtil.SignInActivity;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -95,7 +95,8 @@ public class SplashActivity extends Activity{
      */
     protected void goMain() {
         Log.d(LOG_TAG, "Launching Main Activity...");
-        goAfterSplashTimeout(new Intent(this, BasicActivity.class));
+        //goAfterSplashTimeout(new Intent(this, BaseActivity.class));
+        goAfterSplashTimeout(new Intent(this, EventListActivity.class));
     }
 
     /**
