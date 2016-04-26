@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,7 +48,7 @@
                 android:textColor="@color/error" android:textStyle="bold" />
 
             <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="89dp"
+                android:layout_marginTop="20dp"
                 android:maxLines="1" android:singleLine="true"
                 android:padding="15dp" android:lines="3" android:layout_gravity="center"
                 android:text="No Account Yet? Sign Up!"/>
@@ -60,5 +60,5 @@
 
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>
 

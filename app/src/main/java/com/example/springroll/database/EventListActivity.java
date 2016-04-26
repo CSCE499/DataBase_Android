@@ -9,5 +9,6 @@ public class EventListActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createdFragment() {
         return new EventListFragment();
+        //return new MainActivity();
     }
 }

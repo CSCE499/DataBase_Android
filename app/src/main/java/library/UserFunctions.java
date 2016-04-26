@@ -25,6 +25,7 @@ public class UserFunctions {
 
     private static String login_tag = "login";
     private static String register_tag = "register";
+    private static String saveEvents_tag = "save_event";
 
     /**
      * Constructor.
@@ -79,6 +80,26 @@ public class UserFunctions {
         JSONObject json = jsonParser.getJSONFromUrl(registerURL,params);
         return json;
     }
+
+    /**
+    private String mFilename;
+    public void saveEvents(ArrayList<WeekViewEvent> mEvents)throws JSONException, IOException {
+        // Build an array in JSON
+        JSONArray array = new JSONArray();
+        for (WeekViewEvent c : mEvents)
+            array.put(c.toJSON());
+        // Write the file to disk
+        Writer writer = null;
+        try {
+            OutputStream out = context
+                    .openFileOutput(mFilename, Context.MODE_PRIVATE);
+            writer = new OutputStreamWriter(out);
+            writer.write(array.toString());
+        } finally {
+            if (writer != null)
+                writer.close();
+        }
+    }*/
 
     /**
      * Function to logout user

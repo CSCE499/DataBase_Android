@@ -42,5 +42,6 @@
     <string name="fragment_save">Save</string>
     <string name="fragment_delete">Delete</string>
     <string name="fragment_cancel">Cancel</string>
+    <string name="fragment_edit">Edit</string>
     <string name="show_subtitle">#####</string>
 </resources>

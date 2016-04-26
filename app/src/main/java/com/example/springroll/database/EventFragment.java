@@ -43,7 +43,7 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         this.mEvent = mEvent;
     }
 
-    private boolean mSave = false, mAllDay = false;
+    private boolean mSave = false, mEdit = false, mDelete = false, mCancel = false, mAllDay = false;
     private WeekViewEvent mEvent;
     private Button mStartDateButton, mEndDateButton;
     private EditText mTitle, mLocation;
@@ -142,18 +142,34 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         });
 
         mStartDateButton = (Button)v.findViewById(R.id.start_date_button);
+
+        mFromDate = Calendar.getInstance();
+        //this is the test
+        mFromDate.set(Calendar.HOUR_OF_DAY, hour);
+        mFromDate.set(Calendar.MINUTE, minute);
+        mFromDate.set(Calendar.MONTH, month);
+        mFromDate.set(Calendar.YEAR, year);
+        mFromDate.set(Calendar.DATE, day);
+        mEvent.setStartTime(mFromDate);
+        //end debug
+
         mStartDateButton.setText(setString(am_pm, mStartDateButton, mAllDay));
         mStartDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateTimeDialog(mStartDateButton, am_pm);
-                mFromDate = Calendar.getInstance();
-                mFromDate.set(year, month, day, hour, minute);
+                //mFromDate = Calendar.getInstance();
+                //mFromDate.set(year, month, day, hour, minute);
+                mFromDate.set(Calendar.HOUR_OF_DAY, hour);
+                mFromDate.set(Calendar.MINUTE, minute);
+                mFromDate.set(Calendar.MONTH, month);
+                mFromDate.set(Calendar.YEAR, year);
+                mFromDate.set(Calendar.DATE, day);
                 mEvent.setStartTime(mFromDate);
-                if(mFromDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
+                if (mFromDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
                     mSave = false;
                     mStartDateButton.setPaintFlags(mStartDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }else{
+                } else {
                     mSave = true;
                     mStartDateButton.setPaintFlags(0);
                 }
@@ -162,12 +178,28 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
 
         mEndDateButton = (Button)v.findViewById(R.id.end_date_button);
         mEndDateButton.setText(setString(am_pm, mEndDateButton, mAllDay));
+
+        //This is the test
+        mToDate = Calendar.getInstance();
+        mToDate.set(Calendar.HOUR_OF_DAY, hour+1);
+        mToDate.set(Calendar.MINUTE,minute);
+        mToDate.set(Calendar.MONTH, month);
+        mToDate.set(Calendar.YEAR, year);
+        mToDate.set(Calendar.DATE,day);
+        mEvent.setStartTime(mToDate);
+        //end debug
+
         mEndDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateTimeDialog(mEndDateButton, am_pm);
-                mToDate = Calendar.getInstance();
-                mToDate.set(year, month, day, hour, minute);
+                //mToDate = Calendar.getInstance();
+                //mToDate.set(year, month, day, hour, minute);
+                mToDate.set(Calendar.HOUR_OF_DAY,hour);
+                mToDate.set(Calendar.MINUTE,minute);
+                mToDate.set(Calendar.MONTH,month);
+                mToDate.set(Calendar.YEAR, year);
+                mToDate.set(Calendar.DATE,day);
                 mEvent.setStartTime(mToDate);
                 if(mToDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
                     mSave = false;
@@ -215,20 +247,29 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
     private void showDateTimeDialog(Button b, int am_pm) {
         DateTimePickerDialog pickerDialog = new DateTimePickerDialog(getActivity(), false, this);
         pickerDialog.show();
-        b.setText(setString(am_pm,b,mAllDay));
+        b.setText(setString(am_pm, b, mAllDay));
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_frag, menu);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(mSave)
+        if(mSave) {
             menu.findItem(R.id.delete_event).setVisible(true);
+            menu.findItem(R.id.edit_event).setVisible(true);
+            menu.findItem(R.id.cancel_event).setVisible(false);
+        }
+        else {
+            //menu.findItem(android.R.id.home).setVisible(false);
+            menu.findItem(R.id.delete_event).setVisible(false);
+            menu.findItem(R.id.edit_event).setVisible(false);
+            menu.findItem(R.id.cancel_event).setVisible(true);
+        }
     }
 
     @Override
@@ -242,15 +283,30 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
 
             case R.id.save_event:
                 mSave = true;
+                if(NavUtils.getParentActivityIntent(getActivity()) != null){
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
                 return true;
 
             case R.id.cancel_event:
+                mSave = false;
+                if(NavUtils.getParentActivityIntent(getActivity()) != null){
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
                 return true;
 
             case R.id.delete_event:
+                mSave = false;
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Save the instance
+        //CalEventManager.get(getActivity()).saveEvents();
     }
 
     public void returnResult(){
