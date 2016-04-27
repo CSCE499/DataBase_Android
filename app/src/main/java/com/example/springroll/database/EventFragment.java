@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Switch;
 
 import java.util.Calendar;
@@ -46,20 +48,14 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
     private boolean mSave = false, mEdit = false, mDelete = false, mCancel = false, mAllDay = false;
     private WeekViewEvent mEvent;
     private Button mStartDateButton, mEndDateButton;
-    private EditText mTitle, mLocation;
+    private EditText mTitle, mLocation, mNotes;
     private Switch mAllDaySwitch;
     private Calendar calendar, mFromDate, mToDate;
     private int year, month, day, hour,minute,am_pm = -2;
+    private RatingBar mPriority;
 
-    /**
-     public static EventFragment newInstance(UUID eventId){
-     Bundle args = new Bundle();
-     args.putSerializable(EXTRA_EVENT_ID,eventId);
-
-     EventFragment fragment = new EventFragment();
-     fragment.setArguments(args);
-     return fragment;
-     }*/
+    private boolean edit = false;
+    private boolean viewing = true;
 
     public static EventFragment newInstance(long eventId) {
         Bundle args = new Bundle();
@@ -77,8 +73,6 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         setHasOptionsMenu(true);
 
         mEvent = new WeekViewEvent();
-        // UUID eventId = (UUID)getActivity().getIntent().getSerializableExtra(EXTRA_EVENT_ID);
-        // UUID eventId = (UUID)getArguments().getSerializable(EXTRA_EVENT_ID);
         long eventId = (long)getArguments().getSerializable(EXTRA_EVENT_ID);
         mEvent = CalEventManager.get(getActivity()).getSingleEvent(eventId); //Need to fix this one
 
@@ -88,7 +82,6 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         day = calendar.get(Calendar.DAY_OF_MONTH);
         hour = calendar.get(Calendar.HOUR);
         minute = calendar.get(Calendar.MINUTE);
-        //showDate(year, month+1, day);
         setHasOptionsMenu(true);
 
     }
@@ -101,7 +94,6 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
             if (NavUtils.getParentActivityName(getActivity()) != null) {
                // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
             }
-
 
         mTitle = (EditText)v.findViewById(R.id.event_title);
         mTitle.setText(mEvent.getName());
@@ -185,7 +177,7 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         mToDate.set(Calendar.MINUTE,minute);
         mToDate.set(Calendar.MONTH, month);
         mToDate.set(Calendar.YEAR, year);
-        mToDate.set(Calendar.DATE,day);
+        mToDate.set(Calendar.DATE, day);
         mEvent.setStartTime(mToDate);
         //end debug
 
@@ -226,6 +218,36 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
                     mStartDateButton.setText(setString(am_pm, mStartDateButton, mAllDay));
                     mEndDateButton.setText(setString(am_pm, mEndDateButton, mAllDay));
                 }
+            }
+        });
+
+        mNotes = (EditText)v.findViewById(R.id.notescroll);
+        mNotes.setText(mEvent.getmNote());
+        mNotes.setEnabled(false);
+        mNotes.setTextColor(Color.BLACK);
+        mNotes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mEvent.setmNote(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mPriority = (RatingBar)v.findViewById(R.id.ratingBar);
+        mPriority.setRating(mEvent.getmPriority());
+        mPriority.setEnabled(false);
+        mPriority.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                mEvent.setmPriority((int) rating);
             }
         });
         return v;
@@ -297,6 +319,18 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
 
             case R.id.delete_event:
                 mSave = false;
+                return true;
+            case R.id.edit_event:
+
+                //This is the test need to have method for this!
+                mStartDateButton.setEnabled(true);
+                mEndDateButton.setEnabled(true);
+                mTitle.setEnabled(true);
+                mLocation.setEnabled(true);
+                mAllDaySwitch.setEnabled(true);
+                mNotes.setEnabled(true);
+                mPriority.setEnabled(true);
+                //end test
                 return true;
         }
         return super.onOptionsItemSelected(item);

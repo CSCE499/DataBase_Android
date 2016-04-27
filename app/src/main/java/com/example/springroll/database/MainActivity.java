@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
     private WeekView mWeekView;
     private UserFunctions mFunction;
     //protected abstract Fragment createdFragment();
-    private ArrayList<WeekViewEvent> mNewEvent;
+    private ArrayList<WeekViewEvent> mNewEvent; //Test Debug arrayList
     private List<WeekViewEvent> newEvents;
 
     @Override
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         // Initially, there will be no events on the week view because the user has not tapped on
         // it yet.
         mNewEvent = new ArrayList<WeekViewEvent>();
+
         newEvents = CalEventManager.get(getApplicationContext()).getEventList();
 
 
@@ -267,15 +268,11 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
             //Menu option add event
             case R.id.action_add_event:
-                //Intent addEvent = new Intent(getActivity(),EventActivity.class);
-                //addEvent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //startActivity(addEvent);
                 WeekViewEvent e = new WeekViewEvent();
                 CalEventManager.get(this).addEvent(e);
                 Intent i = new Intent(this,EventActivity.class);
                 i.putExtra(EventFragment.EXTRA_EVENT_ID,e.getId());
                 startActivityForResult(i,0);
-                //return true;
                 return true;
 
         }
@@ -323,14 +320,7 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         Toast.makeText(this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
-        /**
-         WeekViewEvent e = ((EventAdapter)getListAdapter()).getItem(position);
-         Log.d(TAG, e.getName() + " was clicked");
 
-         Intent i = new Intent(this,EventActivity.class);
-         i.putExtra(EventActivity.EXTRA_EVENT_ID, e.getId());
-         startActivity(i);
-         */
         Intent i = new Intent(this,EventActivity.class);
         i.putExtra(EventFragment.EXTRA_EVENT_ID, event.getId());
         startActivity(i);
@@ -390,25 +380,4 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         mWeekView.notifyDatasetChanged();
     }
 
-    /**
-     private class EventAdapter extends ArrayAdapter<WeekViewEvent> {
-
-     public EventAdapter(List<WeekViewEvent> e){
-     super(getActivity(),0,e);
-     }
-
-     @Override
-     public View getView(int posistion, View convertView, ViewGroup parent) {
-     if(convertView == null){
-     convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_event,null);
-     }
-
-     //Configure the view for this event
-     WeekViewEvent e = getItem(posistion);
-
-     TextView title = (TextView)convertView.findViewById(R.id.event_list_titleTextView);
-     return convertView;
-     }
-     }
-     */
 }
