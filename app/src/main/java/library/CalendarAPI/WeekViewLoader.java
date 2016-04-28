@@ -1,4 +1,4 @@
-package library.CalendarAPI;
+package library.calendarAPI;
 
 import java.util.Calendar;
 import java.util.List;

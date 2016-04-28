@@ -1,29 +1,54 @@
-package library.CalendarAPI;
+package library.calendarAPI;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
-import static library.CalendarAPI.WeekViewUtil.isSameDay;
+import static library.calendarAPI.WeekViewUtil.isSameDay;
 
 /**
- * Created by Raquib-ul-Alam Kanak on 7/21/2014.
+ * Source by Raquib-ul-Alam Kanak on 7/21/2014.
  * Website: http://april-shower.com
+ * Edited: TM group
  */
 public class WeekViewEvent {
     private long mId;
     private Calendar mStartTime;
     private Calendar mEndTime;
     private String mName;
+    private String mNote;
     private String mLocation;
-    private int mColor;
+    private int mColor, mPriority;
     private boolean mAllDay;
 
     /**
-     * Empty constructor
+     * Default constructor
      */
     public WeekViewEvent(){
+        //mId = random unique number
+        mId = generateUniqueId();
+        mColor = -256;
+        mName = "Test";
+    }
 
+    /**
+     * Creating random unique id number on long format
+     * @return unique long id number
+     */
+    private static Long generateUniqueId(){
+        long val = -1;
+        do {
+            final UUID uid = UUID.randomUUID();
+            final ByteBuffer buffer = ByteBuffer.wrap(new byte[16]);
+            buffer.putLong(uid.getLeastSignificantBits());
+            buffer.putLong(uid.getMostSignificantBits());
+            final BigInteger bi = new BigInteger(buffer.array());
+            val = bi.longValue();
+        } while (val < 0);
+        return val;
     }
 
     /**
@@ -162,6 +187,27 @@ public class WeekViewEvent {
 
     public void setId(long id) {
         this.mId = id;
+    }
+
+    public String getmNote() {
+        return mNote;
+    }
+
+    public void setmNote(String mNote) {
+        this.mNote = mNote;
+    }
+
+    public int getmPriority() {
+        return mPriority;
+    }
+
+    public void setmPriority(int mPriority) {
+        this.mPriority = mPriority;
+    }
+
+    @Override
+    public String toString() {
+        return mName;
     }
 
     @Override

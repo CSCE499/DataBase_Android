@@ -1,4 +1,4 @@
-package library.CalendarAPI;
+package library.calendarAPI;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -43,8 +43,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import static library.CalendarAPI.WeekViewUtil.isSameDay;
-import static library.CalendarAPI.WeekViewUtil.today;
+import static library.calendarAPI.WeekViewUtil.isSameDay;
+import static library.calendarAPI.WeekViewUtil.today;
 
 
 /**
@@ -1577,8 +1577,8 @@ public class WeekView extends View {
      * <p>
      *     <b>Note:</b> Use {@link #setDateTimeInterpreter(DateTimeInterpreter)} instead.
      * </p>
-     * @param length Supported values are {@link library.CalendarAPI.WeekView#LENGTH_SHORT} and
-     * {@link library.CalendarAPI.WeekView#LENGTH_LONG}.
+     * @param length Supported values are {@link library.calendarAPI.WeekView#LENGTH_SHORT} and
+     * {@link library.calendarAPI.WeekView#LENGTH_LONG}.
      */
     @Deprecated
     public void setDayNameLength(int length) {
@@ -2011,7 +2011,7 @@ public class WeekView extends View {
 
     public interface EventLongPressListener {
         /**
-         * Similar to {@link library.CalendarAPI.WeekView.EventClickListener} but with a long press.
+         * Similar to {@link library.calendarAPI.WeekView.EventClickListener} but with a long press.
          * @param event: event clicked.
          * @param eventRect: view containing the clicked event.
          */
@@ -2028,7 +2028,7 @@ public class WeekView extends View {
 
     public interface EmptyViewLongPressListener {
         /**
-         * Similar to {@link library.CalendarAPI.WeekView.EmptyViewClickListener} but with long press.
+         * Similar to {@link library.calendarAPI.WeekView.EmptyViewClickListener} but with long press.
          * @param time: {@link Calendar} object set with the date and time of the long pressed position on the view.
          */
         void onEmptyViewLongPress(Calendar time);

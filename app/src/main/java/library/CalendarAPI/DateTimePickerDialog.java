@@ -1,4 +1,4 @@
-package library.CalendarAPI;
+package library.calendarAPI;
 
 import android.app.Dialog;
 import android.content.Context;
