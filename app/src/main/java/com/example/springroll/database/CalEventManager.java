@@ -1,9 +1,9 @@
 package com.example.springroll.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import library.UserFunctions;
@@ -13,60 +13,24 @@ import library.calendarAPI.WeekViewEvent;
  * Created by SpringRoll on 4/16/2016.
  */
 public class CalEventManager {
+    /** Class name for log messages. */
+    private final static String LOG_TAG = CalEventManager.class.getSimpleName();
+
     private UserFunctions mFunction;
 
     private static CalEventManager sEventActivity;
     private Context mAppContext;
     private List<WeekViewEvent> mEvents;
-    private int year;
-    private int month;
-
-    public void setYearMonth(int year,int month) {
-        this.year = year;
-        this.month = month;
-    }
-
-    protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
-    }
 
     private CalEventManager(Context context){
+        Log.d(LOG_TAG,"CalEventManager...");
         mAppContext = context;
         mEvents = new ArrayList<WeekViewEvent>();
 
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, month - 1);
-        startTime.set(Calendar.YEAR, year);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        endTime.set(Calendar.MONTH, 7);
-
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
-        event.setLocation("Same house");
-
-        event.setColor(R.color.event_color_01);
-        mEvents.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, month-1);
-        startTime.set(Calendar.YEAR, year);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 4);
-        endTime.set(Calendar.MINUTE, 30);
-        endTime.set(Calendar.MONTH, 7);
-
-        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setLocation("Kevin house");
-
-        event.setColor(R.color.event_color_02);
-        mEvents.add(event);
     }
 
     public static CalEventManager get(Context context){
+        //Log.d(LOG_TAG,"GET_CalEventManager...");
         if(sEventActivity == null){
             sEventActivity = new CalEventManager(context.getApplicationContext());
         }
@@ -83,7 +47,7 @@ public class CalEventManager {
         return mEvents;
     }
 
-    public void setNewListEvent(ArrayList<WeekViewEvent> mEvents) {
+    public void setNewListEvent(List<WeekViewEvent> mEvents) {
         this.mEvents = mEvents;
     }
 
@@ -102,4 +66,5 @@ public class CalEventManager {
             }
         } return null;
     }
+
 }
