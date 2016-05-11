@@ -24,7 +24,10 @@ public class EventPagerActivity extends AppCompatActivity {
 
         mEvents = CalEventManager.get(this).getEventList();
         FragmentManager fm = getFragmentManager();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         /**
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
@@ -32,6 +35,7 @@ public class EventPagerActivity extends AppCompatActivity {
                 return mEvents.size();
             }
 
+<<<<<<< HEAD
             /**
             @Override
             public Fragment getItem(int pos) {
@@ -66,5 +70,15 @@ public class EventPagerActivity extends AppCompatActivity {
             }
         }
 
+=======
+            @Override
+            public Fragment getItem(int pos) {
+                WeekViewEvent e = mEvents.get(pos);
+                return EventFragment.newInstance(e.getId());
+            }
+
+        });
+         */
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     }
 }

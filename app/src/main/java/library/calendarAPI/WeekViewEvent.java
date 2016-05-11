@@ -30,8 +30,8 @@ public class WeekViewEvent {
     public WeekViewEvent(){
         //mId = random unique number
         mId = generateUniqueId();
-        //mColor = -256;
-        //mName = "Test";
+        mColor = -256;
+        mName = "Test";
     }
 
     /**

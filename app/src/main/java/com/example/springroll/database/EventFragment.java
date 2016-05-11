@@ -5,6 +5,11 @@ package com.example.springroll.database;
  */
 
 import android.app.Activity;
+<<<<<<< HEAD
+=======
+import android.app.Dialog;
+import android.app.DialogFragment;
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
 import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,7 +17,10 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+<<<<<<< HEAD
 import android.util.Log;
+=======
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +42,7 @@ import library.calendarAPI.WeekViewEvent;
  * Created by SpringRoll on 3/30/2016.
  */
 public class EventFragment extends Fragment implements DateTimePickerDialog.DateTimeListener{
+<<<<<<< HEAD
     /** Class name for log messages. */
     private final static String LOG_TAG = EventFragment.class.getSimpleName();
 
@@ -44,6 +53,20 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
 
     private boolean mSave = false, mEdit = false, mDelete = false, mCancel = false,
             mAllDay = mEvent.isAllDay();
+=======
+
+    public static final String EXTRA_EVENT_ID = "com.example.springroll.database.event_id";
+    public WeekViewEvent getmEvent() {
+        return mEvent;
+    }
+
+    public void setmEvent(WeekViewEvent mEvent) {
+        this.mEvent = mEvent;
+    }
+
+    private boolean mSave = false, mEdit = false, mDelete = false, mCancel = false, mAllDay = false;
+    private WeekViewEvent mEvent;
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     private Button mStartDateButton, mEndDateButton;
     private EditText mTitle, mLocation, mNotes;
     private Switch mAllDaySwitch;
@@ -54,6 +77,7 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
     private boolean edit = false;
     private boolean viewing = true;
 
+<<<<<<< HEAD
     /**
      *
      * @param eventId
@@ -65,11 +89,18 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         args.putSerializable(EXTRA_EVENT_ID, eventId);
 
         //Create a new Fragment
+=======
+    public static EventFragment newInstance(long eventId) {
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_EVENT_ID, eventId);
+
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         EventFragment fragment = new EventFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+<<<<<<< HEAD
     /**
      *
      * @param savedInstanceState
@@ -86,11 +117,25 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         calendar = Calendar.getInstance();
         mFromDate = Calendar.getInstance();
         mToDate = Calendar.getInstance();
+=======
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+        mEvent = new WeekViewEvent();
+        long eventId = (long)getArguments().getSerializable(EXTRA_EVENT_ID);
+        mEvent = CalEventManager.get(getActivity()).getSingleEvent(eventId); //Need to fix this one
+
+        calendar = Calendar.getInstance();
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH)+1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
         hour = calendar.get(Calendar.HOUR);
         minute = calendar.get(Calendar.MINUTE);
+<<<<<<< HEAD
     }
 
     /**
@@ -103,10 +148,19 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG,"onCreateView...");
+=======
+        setHasOptionsMenu(true);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         View v = inflater.inflate(R.layout.activity_fragment_event,container,false);
 
 
             if (NavUtils.getParentActivityName(getActivity()) != null) {
+<<<<<<< HEAD
                //this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
             }
 
@@ -117,6 +171,13 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
            mTitle.setText(mEvent.getName());
         }
 
+=======
+               // getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+
+        mTitle = (EditText)v.findViewById(R.id.event_title);
+        mTitle.setText(mEvent.getName());
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         mTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,14 +187,18 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mEvent.setName(s.toString());
+<<<<<<< HEAD
                 Log.d(LOG_TAG, "onText_title_Changed...");
                 Log.i("onTextChanged",s.toString());
+=======
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //This space intentionally left blank
             }
+<<<<<<< HEAD
         });//End Title object
 
         // Declare the component Location text filed
@@ -143,6 +208,12 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
             mLocation.setText(mEvent.getLocation());
         }
 
+=======
+        });
+
+        mLocation = (EditText)v.findViewById(R.id.event_location);
+        mLocation.setText(mEvent.getLocation());
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         mLocation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,14 +223,18 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mEvent.setLocation(s.toString());
+<<<<<<< HEAD
                 Log.d(LOG_TAG, "onText_location_Changed...");
                 Log.i("onTextChanged", s.toString());
+=======
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //This space intentionally left blank
             }
+<<<<<<< HEAD
         });// End Location object
 
 
@@ -176,6 +251,26 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
             public void onClick(View v) {
                 Log.d(LOG_TAG, "onStartButtonChanged...");
 
+=======
+        });
+
+        mStartDateButton = (Button)v.findViewById(R.id.start_date_button);
+
+        mFromDate = Calendar.getInstance();
+        //this is the test
+        mFromDate.set(Calendar.HOUR_OF_DAY, hour);
+        mFromDate.set(Calendar.MINUTE, minute);
+        mFromDate.set(Calendar.MONTH, month);
+        mFromDate.set(Calendar.YEAR, year);
+        mFromDate.set(Calendar.DATE, day);
+        mEvent.setStartTime(mFromDate);
+        //end debug
+
+        mStartDateButton.setText(setString(am_pm, mStartDateButton, mAllDay));
+        mStartDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
                 showDateTimeDialog(mStartDateButton, am_pm);
                 //mFromDate = Calendar.getInstance();
                 //mFromDate.set(year, month, day, hour, minute);
@@ -184,9 +279,13 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
                 mFromDate.set(Calendar.MONTH, month);
                 mFromDate.set(Calendar.YEAR, year);
                 mFromDate.set(Calendar.DATE, day);
+<<<<<<< HEAD
                 //mEvent.setStartTime(mFromDate);
                 Log.i("onButtonChanged", mFromDate.toString());
 
+=======
+                mEvent.setStartTime(mFromDate);
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
                 if (mFromDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
                     mSave = false;
                     mStartDateButton.setPaintFlags(mStartDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -195,6 +294,7 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
                     mStartDateButton.setPaintFlags(0);
                 }
             }
+<<<<<<< HEAD
         });// End StartDate object
 
 
@@ -206,6 +306,26 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
             @Override
             public void onClick(View v) {
                 Log.d(LOG_TAG, "onEndButtonChanged...");
+=======
+        });
+
+        mEndDateButton = (Button)v.findViewById(R.id.end_date_button);
+        mEndDateButton.setText(setString(am_pm, mEndDateButton, mAllDay));
+
+        //This is the test
+        mToDate = Calendar.getInstance();
+        mToDate.set(Calendar.HOUR_OF_DAY, hour+1);
+        mToDate.set(Calendar.MINUTE,minute);
+        mToDate.set(Calendar.MONTH, month);
+        mToDate.set(Calendar.YEAR, year);
+        mToDate.set(Calendar.DATE, day);
+        mEvent.setStartTime(mToDate);
+        //end debug
+
+        mEndDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
                 showDateTimeDialog(mEndDateButton, am_pm);
                 //mToDate = Calendar.getInstance();
                 //mToDate.set(year, month, day, hour, minute);
@@ -214,8 +334,12 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
                 mToDate.set(Calendar.MONTH,month);
                 mToDate.set(Calendar.YEAR, year);
                 mToDate.set(Calendar.DATE,day);
+<<<<<<< HEAD
                 //mEvent.setStartTime(mToDate);
                 Log.i("onButtonChanged", mToDate.toString());
+=======
+                mEvent.setStartTime(mToDate);
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
                 if(mToDate.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
                     mSave = false;
                     mEndDateButton.setPaintFlags(mEndDateButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -224,10 +348,15 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
                     mEndDateButton.setPaintFlags(0);
                 }
             }
+<<<<<<< HEAD
         });// End EndDate object
 
 
         //
+=======
+        });
+
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         mAllDaySwitch = (Switch)v.findViewById(R.id.switch1);
         mAllDaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -248,8 +377,12 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
 
         mNotes = (EditText)v.findViewById(R.id.notescroll);
         mNotes.setText(mEvent.getmNote());
+<<<<<<< HEAD
         //mNotes.setEnabled(false);
         mNotes.setEnabled(true);
+=======
+        mNotes.setEnabled(false);
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         mNotes.setTextColor(Color.BLACK);
         mNotes.addTextChangedListener(new TextWatcher() {
             @Override
@@ -269,14 +402,19 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
 
         mPriority = (RatingBar)v.findViewById(R.id.ratingBar);
         mPriority.setRating(mEvent.getmPriority());
+<<<<<<< HEAD
         //mPriority.setEnabled(false);
         mPriority.setEnabled(true);
+=======
+        mPriority.setEnabled(false);
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         mPriority.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 mEvent.setmPriority((int) rating);
             }
         });
+<<<<<<< HEAD
         //end Declare
 
         return v;
@@ -289,6 +427,11 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
      * @param mAllDay
      * @return
      */
+=======
+        return v;
+    }
+
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     public StringBuilder setString(int am_pm,Button b,Boolean mAllDay){
         StringBuilder text;
         if(mAllDay){
@@ -302,6 +445,14 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         return text;
     }
 
+<<<<<<< HEAD
+=======
+    private void showDateTimeDialog(Button b, int am_pm) {
+        DateTimePickerDialog pickerDialog = new DateTimePickerDialog(getActivity(), false, this);
+        pickerDialog.show();
+        b.setText(setString(am_pm, b, mAllDay));
+    }
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -312,9 +463,14 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+<<<<<<< HEAD
 
         if(mSave) {
            // menu.findItem(R.id.delete_event).setVisible(true);
+=======
+        if(mSave) {
+            menu.findItem(R.id.delete_event).setVisible(true);
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
             menu.findItem(R.id.edit_event).setVisible(true);
             menu.findItem(R.id.cancel_event).setVisible(false);
         }
@@ -376,6 +532,7 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
     }
 
     public void returnResult(){
+<<<<<<< HEAD
         getActivity().setResult(Activity.RESULT_OK, null);
     }
 
@@ -391,17 +548,24 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         b.setText(setString(am_pm, b, mAllDay));
         Log.i("showDateSetText",setString(am_pm, b, mAllDay).toString());
         pickerDialog.show();
+=======
+        getActivity().setResult(Activity.RESULT_OK,null);
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     }
 
     @Override
     public void onDateTimeSelected(int year, int month, int day, int hour, int min, int am_pm) {
+<<<<<<< HEAD
         Log.d(LOG_TAG,"onDataTimeSelected...");
+=======
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         this.year = year;
         this.month = month;
         this.day = day;
         this.hour = hour;
         this.minute = min;
         this.am_pm = am_pm;
+<<<<<<< HEAD
         Calendar mCal = Calendar.getInstance();
         mCal.set(Calendar.HOUR_OF_DAY,hour);
         mCal.set(Calendar.MINUTE,minute);
@@ -409,6 +573,48 @@ public class EventFragment extends Fragment implements DateTimePickerDialog.Date
         mCal.set(Calendar.YEAR, year);
         mCal.set(Calendar.DATE, day);
         Log.i("onDataTimeSelected: ", mCal.toString());
+=======
+        //String text = day + "/" + month + "/" + year + " - " + hour + ":" + min;
+        // if (am_pm != -1)
+        //text = text + (am_pm == Calendar.AM ? "AM" : "PM");
+    }
+
+    public static class DateTimePickerFragment extends DialogFragment implements DateTimePickerDialog.DateTimeListener {
+        private int year,month,day,am_pm;
+        private int hour,minute;
+        DateTimePickerDialog.DateTimeListener onDateSet;
+
+        public DateTimePickerFragment(){}
+
+        public void setCallBack(DateTimePickerDialog.DateTimeListener ondate){
+            onDateSet = ondate;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new DateTimePickerDialog(getActivity(),false,this);
+        }
+
+        @Override
+        public void setArguments(Bundle args) {
+            super.setArguments(args);
+            year = args.getInt("year");
+            month = args.getInt("month");
+            day = args.getInt("day");
+            hour = args.getInt("hour");
+            minute = args.getInt("minute");
+        }
+
+        @Override
+        public void onDateTimeSelected(int year, int month, int day, int hour, int min, int am_pm) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+            this.hour = hour;
+            this.minute = min;
+            this.am_pm = am_pm;
+        }
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     }
 
 }
