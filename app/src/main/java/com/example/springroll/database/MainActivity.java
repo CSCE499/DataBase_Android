@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-<<<<<<< HEAD
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
