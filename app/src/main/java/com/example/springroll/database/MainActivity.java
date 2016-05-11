@@ -1,9 +1,16 @@
 package com.example.springroll.database;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.RectF;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,9 +18,19 @@ import android.widget.Toast;
 
 import com.example.springroll.database.signInUtil.SignInActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,25 +47,43 @@ import library.calendarAPI.WeekViewEvent;
  * Website: http://alamkanak.github.io
  */
 public class MainActivity extends AppCompatActivity implements WeekView.EventClickListener, WeekView.EmptyViewClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
-    private static final String TAG = "MainActivity";
+    /** Class name for log messages. */
+    private final static String LOG_TAG = MainActivity.class.getSimpleName();
+
+    /** Key for diplay the canlendar view option. */
     private static final int REQUEST_EVENT = 1;
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
+
+    /**
+     * JSON Response node names.
+     **/
+    private static String KEY_SUCCESS = "success";
+    private static String KEY_ERROR = "error";
+
+    /** The custom UI Calendar display for setting up the column and date. */
     private WeekView mWeekView;
-    private UserFunctions mFunction;
-    //protected abstract Fragment createdFragment();
+
+    /** The UserFunction class to store and get calendar information from WAMP SERVER. */
+    private UserFunctions functionManager;
+
+    /** Bundle key for saving/restoring the toolbar title. */
+    private final static String BUNDLE_KEY_TOOLBAR_TITLE = "title";
+
     private ArrayList<WeekViewEvent> mNewEvent; //Test Debug arrayList
-    private List<WeekViewEvent> newEvents;
+
+    private List<WeekViewEvent> EventFromCAL;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG,"onCreate...");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calander_base);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        mFunction = new UserFunctions(getApplicationContext());
+        //functionManager = new UserFunctions(getApplicationContext());
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
@@ -71,32 +106,40 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
         // Initially, there will be no events on the week view because the user has not tapped on
         // it yet.
-        mNewEvent = new ArrayList<WeekViewEvent>();
 
-        newEvents = CalEventManager.get(getApplicationContext()).getEventList();
-
+        EventFromCAL = CalEventManager.get(getApplicationContext()).getEventList();
 
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
         setupDateTimeInterpreter(false);
+        new NetCheck().execute();
+
 
     }
 
+    /**
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        //new NetCheck().execute();
+        return super.onCreateView(name, context, attrs);
+    }*/
+
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        //test
-        CalEventManager.get(getApplicationContext()).setYearMonth(newYear,newMonth);
-        // Populate the week view with the events that was added by tapping on empty view.
-        ArrayList<WeekViewEvent> matchedEvents = new ArrayList<WeekViewEvent>();
-        ArrayList<WeekViewEvent> mnewEvents = getNewEvents(newYear, newMonth);
-        for (WeekViewEvent event : newEvents) {
-            //if (eventMatches(event, newYear, newMonth)) {
+        Log.d(LOG_TAG, "onMonthChange...");
+        Log.i(LOG_TAG, "" + EventFromCAL.size());
+
+        //mAuthTask.execute();
+
+
+        List<WeekViewEvent> matchedEvents = new ArrayList<WeekViewEvent>();
+        for (WeekViewEvent event : EventFromCAL) {
+            if (eventMatches(event, newYear,newMonth)) {
                 matchedEvents.add(event);
-            //}
+            }
         }
-        //matchedEvents.addAll(mnewEvents);
         return matchedEvents;
-        //return this.newEvents;
+
     }
 
     /**
@@ -117,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
      * @return The events of the given year and month.
      */
     private ArrayList<WeekViewEvent> getNewEvents(int year, int month) {
-
+        Log.d(LOG_TAG," getNewEvents...");
         // Get the starting point and ending point of the given month. We need this to find the
         // events of the given month.
         Calendar startOfMonth = Calendar.getInstance();
@@ -143,43 +186,15 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
                 events.add(event);
             }
         }
-
-        /**
-        //This is the test
-        Calendar startTime = Calendar.getInstance();
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 4);
-        startTime.set(Calendar.MINUTE, 20);
-        startTime.set(Calendar.MONTH, month-1);
-        startTime.set(Calendar.YEAR, year);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 5);
-        endTime.set(Calendar.MINUTE, 0);
-        WeekViewEvent event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setLocation("tu house");
-
-        event.setColor(getResources().getColor(R.color.event_color_03));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 5);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, month-1);
-        startTime.set(Calendar.YEAR, year);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 2);
-        endTime.set(Calendar.MONTH, month-1);
-        event = new WeekViewEvent(2, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
-        event.setLocation("Glass house");
-        events.add(event);
-        //end test
-         */
-
-
         return events;
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_EVENT){
@@ -187,19 +202,43 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         }
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
+        // Save the title so it will be restored properly to match the view loaded when rotation
+        // was changed or in case the activity was destroyed.
     }
 
+    @Override
+    public void onResume(){
+        Log.d(LOG_TAG,"onResume...");
+        super.onResume();
+        mWeekView.notifyDatasetChanged();
+    }
+
+    /**
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(LOG_TAG, "onOptionsItemSelected");
         int id = item.getItemId();
         setupDateTimeInterpreter(id == R.id.action_week_view);
         switch (id){
@@ -252,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
             //Menu option logout
             case R.id.action_logout:
                 item.setChecked(!item.isChecked());
-                mFunction.logoutUser();
+                functionManager.logoutUser();
                 Intent upanel = new Intent(getApplicationContext(), SignInActivity.class);
                 upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(upanel);
@@ -262,16 +301,26 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
                 finish();
                 return true;
 
-            //Menu option setting
+            //Menu option refresh
             case R.id.action_settings:
+                mWeekView.notifyDatasetChanged();
+                return true;
+
+            //Menu option compute the study time
+            case R.id.action_compute:
+                mWeekView.notifyDatasetChanged();
+                Intent j = new Intent(this,ComputeActivity.class);
+                startActivity(j);
                 return true;
 
             //Menu option add event
             case R.id.action_add_event:
                 WeekViewEvent e = new WeekViewEvent();
+                Log.i(LOG_TAG,"adding event with id: "+e.getId());
                 CalEventManager.get(this).addEvent(e);
                 Intent i = new Intent(this,EventActivity.class);
                 i.putExtra(EventFragment.EXTRA_EVENT_ID,e.getId());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(i,0);
                 return true;
 
@@ -308,12 +357,19 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         });
     }
 
+    /**
+     * Getting the Calendar Information
+     * @param time
+     * @return string details of calendar
+     */
     protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
+        return String.format("Event of %02d:%02d %s/%d/%d", time.get(Calendar.HOUR_OF_DAY),
+                time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1,
+                time.get(Calendar.DAY_OF_MONTH),time.get(Calendar.YEAR));
     }
 
     /**
-     *
+     * Display the event detail on event click
      * @param event: event clicked.
      * @param eventRect: view containing the clicked event.
      */
@@ -323,11 +379,13 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
         Intent i = new Intent(this,EventActivity.class);
         i.putExtra(EventFragment.EXTRA_EVENT_ID, event.getId());
-        startActivity(i);
+        Log.i("onEventClick", "" + EventFragment.EXTRA_EVENT_ID + ", " + event.getId());
+
+        startActivityForResult(i,0);
     }
 
     /**
-     *
+     * Display the long press on even click
      * @param event: event clicked.
      * @param eventRect: view containing the clicked event.
      */
@@ -343,18 +401,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
     @Override
     public void onEmptyViewLongPress(Calendar time) {
         Toast.makeText(this, "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-
-        // Set the new event with duration one hour.
-        Calendar endTime = (Calendar) time.clone();
-        endTime.add(Calendar.HOUR, 1);
-
-        // Create a new event.
-        WeekViewEvent event = new WeekViewEvent(20, "New event", time, endTime);
-        mNewEvent.add(event);
-
-        // Refresh the week view. onMonthChange will be called again.
-        mWeekView.notifyDatasetChanged();
-
     }
 
     public WeekView getWeekView() {
@@ -368,16 +414,226 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
     @Override
     public void onEmptyViewClicked(Calendar time) {
         Toast.makeText(this, "Empty view pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-        // Set the new event with duration one hour.
-        Calendar endTime = (Calendar) time.clone();
-        endTime.add(Calendar.HOUR, 1);
+    }
 
-        // Create a new event.
-        WeekViewEvent event = new WeekViewEvent(20, "New event", time, endTime);
-        mNewEvent.add(event);
+    /**
+     * Async Task to check whether internet connection is working
+     **/
 
-        // Refresh the week view. onMonthChange will be called again.
-        mWeekView.notifyDatasetChanged();
+    private class NetCheck extends AsyncTask<String, String, Boolean> {
+        private final String LOG_TAG = NetCheck.class.getSimpleName();
+        private ProgressDialog nDialog;
+
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(LOG_TAG,"onPreExecute...");
+            super.onPreExecute();
+            nDialog = new ProgressDialog(MainActivity.this);
+            /*8
+            nDialog.setMessage("Loading..");
+            nDialog.setTitle("Checking Network");
+            nDialog.setIndeterminate(false);
+            nDialog.setCancelable(true);
+            nDialog.show();
+            */
+        }
+
+        @Override
+        protected Boolean doInBackground(String... args) {
+
+            /**
+             * Gets current device state and checks for working internet connection by trying Google.
+             **/
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()) {
+                try {
+                    URL url = new URL("http://www.google.com");
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setConnectTimeout(3000);
+                    urlc.connect();
+                    if (urlc.getResponseCode() == 200) {
+                        return true;
+                    }
+                } catch (MalformedURLException e1) {
+
+                    e1.printStackTrace();
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            Log.d(LOG_TAG,"onPostExecute...");
+            if (success) {
+                nDialog.dismiss();
+                new AsynchronousProcess().execute();
+            } else {
+                nDialog.dismiss();
+                Toast.makeText(getApplication(),"Error in Network Connection", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            //Empty Construct
+        }
+    }
+
+    private class AsynchronousProcess extends AsyncTask<String, String, JSONObject> {
+        private final String LOG_TAG = AsynchronousProcess.class.getSimpleName();
+        /**
+         * Defining Process dialog
+         **/
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(LOG_TAG, "onPreExecute...");
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MainActivity.this);
+            //pDialog.setTitle("Contacting Servers");
+            //pDialog.setMessage("Registering ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            //pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... args) {
+
+            functionManager = new UserFunctions(getApplicationContext());
+            JSONObject json = functionManager.getUserShcedule();
+
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            Log.d(LOG_TAG,"OnPostExecute the JSON...");
+            /**
+             * Checks for success message.
+             **/
+            try {
+                if (json.getString(KEY_SUCCESS) != null) {
+                    String res = json.getString(KEY_SUCCESS);
+
+                    String red = json.getString(KEY_ERROR);
+
+                    if(Integer.parseInt(res) == 1){
+                        pDialog.setTitle("Getting Data");
+                        pDialog.setMessage("Loading Info");
+                        CalEventManager.get(getApplicationContext()).getEventList().clear();
+                        JSONArray list = json.getJSONArray("event");
+                        for (int i = 0; i < list.length(); i++) {
+                            JSONObject eventJSON = list.getJSONObject(i);
+
+                            WeekViewEvent e = new WeekViewEvent();
+                            e.setId(eventJSON.getLong("event_num"));
+                            e.setName(eventJSON.getString("event_title"));
+                            e.setLocation(eventJSON.getString("location"));
+                            e.setmRepeatDays(eventJSON.getString("days"));
+                            e.setmCourse(eventJSON.getInt("course"));
+                            e.setmPriority(eventJSON.getInt("priority"));
+                            if(eventJSON.getInt("all_day") == 1 ){
+                                e.setAllDay(true);
+                            }
+
+                            //Parse Time.
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm",Locale.US);
+                            Date start = new Date();
+                            Date end = new Date();
+                            Date done = new Date();
+                            try {
+                                start = format.parse(eventJSON.getString("s_date"));
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                            try {
+                                end = format.parse(eventJSON.getString("e_date"));
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                            try {
+                                if(!eventJSON.getString("done_date").equalsIgnoreCase("null")) {
+                                    done = format.parse(eventJSON.getString("done_date"));
+                                    Calendar doneTime = Calendar.getInstance();
+                                    doneTime.set(Calendar.DAY_OF_MONTH, done.getDate());
+                                    doneTime.set(Calendar.HOUR_OF_DAY, done.getHours());
+                                    doneTime.set(Calendar.MINUTE, done.getMinutes());
+                                    doneTime.set(Calendar.MONTH, done.getMonth());
+                                    doneTime.set(Calendar.YEAR, done.getYear() + 1900);
+                                    e.setmDoneDate(doneTime);
+                                }
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+
+                            // Initialize start and end time.
+                            Calendar startTime = Calendar.getInstance();
+                            startTime.set(Calendar.DAY_OF_MONTH,start.getDate());
+                            startTime.set(Calendar.HOUR_OF_DAY, start.getHours());
+                            startTime.set(Calendar.MINUTE, start.getMinutes());
+                            startTime.set(Calendar.MONTH, start.getMonth());
+                            startTime.set(Calendar.YEAR, start.getYear()+1900);
+                           //
+                            Calendar endTime = Calendar.getInstance();
+                            endTime.set(Calendar.DAY_OF_MONTH,end.getDate());
+                            endTime.set(Calendar.HOUR_OF_DAY, end.getHours());
+                            endTime.set(Calendar.MINUTE, end.getMinutes());
+                            endTime.set(Calendar.MONTH, end.getMonth());
+                            endTime.set(Calendar.YEAR, end.getYear() + 1900);
+
+
+                            e.setStartTime(startTime);
+                            e.setEndTime(endTime);
+                            e.setColor(Color.parseColor(eventJSON.getString("color")));
+
+                            CalEventManager.get(getApplicationContext()).addEvent(e);
+
+                            if(!eventJSON.getString("days").isEmpty()) {
+                                //WeekViewEvent reEvent = e;
+                                //List<WeekViewEvent> subEvent = functionManager.repeatEvent(reEvent);
+                                //for(int g = 0; g < subEvent.size(); g++) {
+                                 //   CalEventManager.get(getApplicationContext()).getEventList().add(subEvent.get(g));
+                                //}
+                            //}
+                            }
+
+                        }
+                        mWeekView.notifyDatasetChanged();
+                        //mError.setText("Successfully Registered
+                        //db.addUser(json_user.getString(KEY_USERNAME),json_user.getString(KEY_CREATE_AT));
+
+                        pDialog.dismiss();
+
+                    }
+                    else if (Integer.parseInt(red) ==2){
+                        pDialog.dismiss();
+                        Toast.makeText(getApplication(),"Application Cannot make another schedule", Toast.LENGTH_SHORT).show();
+                        //mError.setText("User already exists");
+                    }
+                    else if (Integer.parseInt(red) ==3){
+                        pDialog.dismiss();
+                        Toast.makeText(getApplication(),"JSON ERROR", Toast.LENGTH_SHORT).show();
+                        //mError.setText("Invalid username id");
+                    }
+                }
+                else{
+                    pDialog.dismiss();
+                    Toast.makeText(getApplication(),"Error in Network Connection", Toast.LENGTH_SHORT).show();
+                    //mError.setText("Error occured in registration");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
