@@ -1,10 +1,17 @@
 package library.calendarAPI;
 
+import android.graphics.Color;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static library.calendarAPI.WeekViewUtil.isSameDay;
@@ -15,30 +22,109 @@ import static library.calendarAPI.WeekViewUtil.isSameDay;
  * Edited: TM group
  */
 public class WeekViewEvent {
+
+    /** Initializes WeekViewEvent values*/
     private long mId;
+    private long mRepeatId;
     private Calendar mStartTime;
     private Calendar mEndTime;
+    private Calendar mDoneDate;
     private String mName;
     private String mNote;
     private String mLocation;
-    private int mColor, mPriority;
+    private String mRepeatDays;
+    private int mColor, mPriority, mCourse;
     private boolean mAllDay;
 
+
+    /** Initializes JSONObject params*/
+    private static final String JSON_ID = "id";
+    private static final String JSON_S_TIME = "startTime";
+    private static final String JSON_E_TIME = "endTime";
+    private static final String JSON_TITLE = "title";
+    private static final String JSON_NOTE = "note";
+    private static final String JSON_LOCATION = "location";
+    private static final String JSON_COLOR = "color";
+    private static final String JSON_PRIORITY = "priority";
+    private static final String JSON_BOOLEAN_ALLDAY = "allDay";
+    private static final String JSON_DONE_DATE = "doneDate";
+    private static final String JSON_REPEAT = "days";
+    private static final String JSON_COURSE = "course";
+
     /**
-     * Default constructor
+     * Convert WeekViewEvent attribute into Json Object
+     * @return JSONObject json object of the week view event
+     * @throws JSONException
+     */
+    public JSONObject toJSON()throws JSONException{
+        JSONObject json = new JSONObject();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm", Locale.US);
+
+        json.put(JSON_ID,""+ mId);
+        json.put(JSON_TITLE, mName);
+        if(mStartTime != null)
+            json.put(JSON_S_TIME, format.format(mStartTime.getTime()));
+        else
+            json.put(JSON_S_TIME, "");
+        if(mEndTime != null)
+            json.put(JSON_E_TIME, format.format(mEndTime.getTime()));
+        else
+            json.put(JSON_E_TIME, "");
+        if(mDoneDate != null)
+            json.put(JSON_DONE_DATE,format.format(mDoneDate.getTime()));
+        else
+            json.put(JSON_DONE_DATE,"");
+        json.put(JSON_LOCATION, mLocation);
+        json.put(JSON_BOOLEAN_ALLDAY, ""+mAllDay);
+        json.put(JSON_NOTE, ""+mNote);
+        json.put(JSON_PRIORITY, mPriority);
+        json.put(JSON_COURSE,""+mCourse);
+        json.put(JSON_COLOR, String.format("#%06X", (0xFFFFFF & mColor)));
+        json.put(JSON_REPEAT,""+mRepeatDays);
+
+        return json;
+
+    }
+    /**
+    public WeekViewEvent(WeekViewEvent w){
+        mId = generateUniqueId();
+        mStartTime = w.getStartTime();
+        mEndTime = w.getEndTime();
+        mName = w.getName();
+        mLocation = w.getLocation();
+        mDoneDate = w.getmDoneDate();
+        mPriority = w.getmPriority();
+        mAllDay = w.isAllDay();
+        mColor = w.getColor();
+        mCourse = w.getmCourse();
+        mRepeatDays = w.getmRepeatDays();
+        mRepeatId = w.getmPrepeatID();
+    }*/
+
+    /**
+     * Default Empty constructor
      */
     public WeekViewEvent(){
-        //mId = random unique number
         mId = generateUniqueId();
-        mColor = -256;
-        mName = "Test";
+        mStartTime = null;
+        mEndTime = null;
+        mName = "";
+        mNote = "";
+        mLocation = "";
+        mDoneDate = null;
+        mPriority = 0;
+        mAllDay = false;
+        mColor = Color.parseColor("#f8b552");
+        mCourse = 0;
+        mRepeatDays = "";
+        mRepeatId = -1;
     }
 
     /**
      * Creating random unique id number on long format
      * @return unique long id number
      */
-    private static Long generateUniqueId(){
+    public Long generateUniqueId(){
         long val = -1;
         do {
             final UUID uid = UUID.randomUUID();
@@ -203,6 +289,38 @@ public class WeekViewEvent {
 
     public void setmPriority(int mPriority) {
         this.mPriority = mPriority;
+    }
+
+    public String getmRepeatDays() {
+        return mRepeatDays;
+    }
+
+    public void setmRepeatDays(String mRepeatDays) {
+        this.mRepeatDays = mRepeatDays;
+    }
+
+    public int getmCourse() {
+        return mCourse;
+    }
+
+    public void setmCourse(int mCourse) {
+        this.mCourse = mCourse;
+    }
+
+    public Calendar getmDoneDate() {
+        return mDoneDate;
+    }
+
+    public void setmDoneDate(Calendar mDoneDate) {
+        this.mDoneDate = mDoneDate;
+    }
+
+    public long getmPrepeatID() {
+        return mRepeatId;
+    }
+
+    public void setmPrepeatID(long mPrepeatID) {
+        this.mRepeatId = mPrepeatID;
     }
 
     @Override
