@@ -175,7 +175,7 @@
 
             </RelativeLayout>
 
-<<<<<<< HEAD
+
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -183,9 +183,9 @@
                 android:id="@+id/delte_button"
                 android:layout_alignParentTop="true"
                 />
-=======
 
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
+
+
 
         </LinearLayout>
 
