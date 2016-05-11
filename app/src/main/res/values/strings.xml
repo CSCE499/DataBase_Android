@@ -22,6 +22,15 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing username
     completions."</string>
 
+<<<<<<< HEAD
+    <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY -->
+
+    <string name="main_nav_menu_item_home">Home</string>
+    <string name="title_activity_item_detail">Item Detail</string>
+    <string name="title_activity_item_list">Item List</string>
+
+=======
+>>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     <!-- Edit event properties -->
     <string name="title">Title</string>
     <string name="from">From</string>
