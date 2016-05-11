@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\icon_check_dated.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\icon_check_dated.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\button_register_pressed.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\button_register_pressed.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\mobile_analytics.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\mobile_analytics.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\icon_delay.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\icon_delay.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\icon_star.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\icon_star.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\icon_check.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\icon_check.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\splash_icon.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\splash_icon.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\button_register.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\button_register.png"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\icon_home.png",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\appTest\\DataBase\\app\\src\\main\\res\\mipmap-xxhdpi\\icon_home.png"
+    }
+]
