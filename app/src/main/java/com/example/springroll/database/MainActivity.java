@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-<<<<<<< HEAD
-import android.util.Log;
-=======
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,42 +30,12 @@ import library.calendarAPI.WeekViewEvent;
  * Website: http://alamkanak.github.io
  */
 public class MainActivity extends AppCompatActivity implements WeekView.EventClickListener, WeekView.EmptyViewClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
-<<<<<<< HEAD
-    /** Class name for log messages. */
-    private final static String LOG_TAG = MainActivity.class.getSimpleName();
-
-    /** Key for diplay the canlendar view option. */
-=======
     private static final String TAG = "MainActivity";
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     private static final int REQUEST_EVENT = 1;
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
-<<<<<<< HEAD
-
-    /** The custom UI Calendar display for setting up the column and date. */
-    private WeekView mWeekView;
-
-    /** The UserFunction class to store and get calendar information from WAMP SERVER. */
-    private UserFunctions mFunction;
-
-    /** Bundle key for saving/restoring the toolbar title. */
-    private final static String BUNDLE_KEY_TOOLBAR_TITLE = "title";
-
-    private ArrayList<WeekViewEvent> mNewEvent; //Test Debug arrayList
-
-    private List<WeekViewEvent> EventFromCAL;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG,"onCreate...");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calander_base);
-
-=======
     private WeekView mWeekView;
     private UserFunctions mFunction;
     //protected abstract Fragment createdFragment();
@@ -82,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         setContentView(R.layout.activity_calander_base);
 
         //getActionBar().setDisplayHomeAsUpEnabled(true);
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         mFunction = new UserFunctions(getApplicationContext());
 
         // Get a reference for the week view in the layout.
@@ -106,15 +71,10 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
         // Initially, there will be no events on the week view because the user has not tapped on
         // it yet.
-<<<<<<< HEAD
-
-        EventFromCAL = CalEventManager.get(getApplicationContext()).getEventList();
-=======
         mNewEvent = new ArrayList<WeekViewEvent>();
 
         newEvents = CalEventManager.get(getApplicationContext()).getEventList();
 
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
 
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
@@ -124,19 +84,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-<<<<<<< HEAD
-        Log.d(LOG_TAG,"onMonthChange...");
-        Log.i(LOG_TAG,""+EventFromCAL.size());
-
-        List<WeekViewEvent> matchedEvents = new ArrayList<WeekViewEvent>();
-        for (WeekViewEvent event : EventFromCAL) {
-            if (eventMatches(event, newYear, newMonth)) {
-                matchedEvents.add(event);
-            }
-        }
-        return matchedEvents;
-
-=======
         //test
         CalEventManager.get(getApplicationContext()).setYearMonth(newYear,newMonth);
         // Populate the week view with the events that was added by tapping on empty view.
@@ -150,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         //matchedEvents.addAll(mnewEvents);
         return matchedEvents;
         //return this.newEvents;
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     }
 
     /**
@@ -171,11 +117,7 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
      * @return The events of the given year and month.
      */
     private ArrayList<WeekViewEvent> getNewEvents(int year, int month) {
-<<<<<<< HEAD
-        Log.d(LOG_TAG," getNewEvents...");
-=======
 
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         // Get the starting point and ending point of the given month. We need this to find the
         // events of the given month.
         Calendar startOfMonth = Calendar.getInstance();
@@ -201,17 +143,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
                 events.add(event);
             }
         }
-<<<<<<< HEAD
-        return events;
-    }
-
-    /**
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-=======
 
         /**
         //This is the test
@@ -249,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         return events;
     }
 
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_EVENT){
@@ -257,57 +187,19 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         }
     }
 
-<<<<<<< HEAD
-    /**
-     *
-     * @param savedInstanceState
-     */
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
-        // Save the title so it will be restored properly to match the view loaded when rotation
-        // was changed or in case the activity was destroyed.
-    }
-
-    @Override
-    public void onResume(){
-        Log.d(LOG_TAG,"onResume...");
-        super.onResume();
-        mWeekView.notifyDatasetChanged();
-    }
-
-    /**
-     *
-     * @param menu
-     * @return
-     */
-    @Override
-=======
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-<<<<<<< HEAD
-    /**
-     *
-     * @param item
-     * @return
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(LOG_TAG, "onOptionsItemSelected");
-=======
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         int id = item.getItemId();
         setupDateTimeInterpreter(id == R.id.action_week_view);
         switch (id){
@@ -416,28 +308,12 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         });
     }
 
-<<<<<<< HEAD
-    /**
-     * Getting the Calendar Information
-     * @param time
-     * @return string details of calendar
-     */
-    protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d/%d", time.get(Calendar.HOUR_OF_DAY),
-                time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1,
-                time.get(Calendar.DAY_OF_MONTH),time.get(Calendar.YEAR));
-    }
-
-    /**
-     * Display the event detail on event click
-=======
     protected String getEventTitle(Calendar time) {
         return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
     }
 
     /**
      *
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
      * @param event: event clicked.
      * @param eventRect: view containing the clicked event.
      */
@@ -447,21 +323,11 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
         Intent i = new Intent(this,EventActivity.class);
         i.putExtra(EventFragment.EXTRA_EVENT_ID, event.getId());
-<<<<<<< HEAD
-        Log.i("onEventClick", "" + EventFragment.EXTRA_EVENT_ID + ", " + event.getId());
-
-        startActivityForResult(i,0);
-    }
-
-    /**
-     * Display the long press on even click
-=======
         startActivity(i);
     }
 
     /**
      *
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
      * @param event: event clicked.
      * @param eventRect: view containing the clicked event.
      */
@@ -477,8 +343,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
     @Override
     public void onEmptyViewLongPress(Calendar time) {
         Toast.makeText(this, "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-<<<<<<< HEAD
-=======
 
         // Set the new event with duration one hour.
         Calendar endTime = (Calendar) time.clone();
@@ -491,7 +355,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
         // Refresh the week view. onMonthChange will be called again.
         mWeekView.notifyDatasetChanged();
 
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     }
 
     public WeekView getWeekView() {
@@ -505,11 +368,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
     @Override
     public void onEmptyViewClicked(Calendar time) {
         Toast.makeText(this, "Empty view pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-<<<<<<< HEAD
-
-        /**
-=======
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
         // Set the new event with duration one hour.
         Calendar endTime = (Calendar) time.clone();
         endTime.add(Calendar.HOUR, 1);
@@ -520,10 +378,6 @@ public class MainActivity extends AppCompatActivity implements WeekView.EventCli
 
         // Refresh the week view. onMonthChange will be called again.
         mWeekView.notifyDatasetChanged();
-<<<<<<< HEAD
-         */
-=======
->>>>>>> 5e5def1a0c9e4c35098b30734bb6d0bf1599d52d
     }
 
 }
