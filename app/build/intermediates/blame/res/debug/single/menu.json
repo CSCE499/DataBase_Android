@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_frag.xml",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\DataBase\\app\\src\\main\\res\\menu\\menu_frag.xml"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\DataBase\\app\\src\\main\\res\\menu\\menu_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\SpringRoll\\Desktop\\android\\DataBase\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_event_item_context.xml",
+        "source": "C:\\Users\\SpringRoll\\Desktop\\android\\DataBase\\app\\src\\main\\res\\menu\\menu_event_item_context.xml"
+    }
+]
