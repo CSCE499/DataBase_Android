@@ -9,7 +9,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+<<<<<<< HEAD
 import org.json.JSONArray;
+=======
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +29,10 @@ public class JSONParser {
     static InputStream input = null;
     static JSONObject jObj = null;
     static String jsonString = "";
+<<<<<<< HEAD
     JSONArray jArray = null;
+=======
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
 
     // constructor
     public JSONParser() {
@@ -63,7 +69,11 @@ public class JSONParser {
                 sb.append(line + "\n");
             }
             input.close();
+<<<<<<< HEAD
             jsonString = sb.toString(); //Log.i("JSON", jsonString);
+=======
+            jsonString = sb.toString(); Log.i("JSON", jsonString);
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
             //Log.e("JSON", jsonString);
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());

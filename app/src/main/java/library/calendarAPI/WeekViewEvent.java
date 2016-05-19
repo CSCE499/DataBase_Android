@@ -65,15 +65,15 @@ public class WeekViewEvent {
         if(mStartTime != null)
             json.put(JSON_S_TIME, format.format(mStartTime.getTime()));
         else
-            json.put(JSON_S_TIME, null);
+            json.put(JSON_S_TIME, "");
         if(mEndTime != null)
             json.put(JSON_E_TIME, format.format(mEndTime.getTime()));
         else
-            json.put(JSON_E_TIME, null);
+            json.put(JSON_E_TIME, "");
         if(mDoneDate != null)
             json.put(JSON_DONE_DATE,format.format(mDoneDate.getTime()));
         else
-            json.put(JSON_DONE_DATE,null);
+            json.put(JSON_DONE_DATE,"");
         json.put(JSON_LOCATION, mLocation);
         json.put(JSON_BOOLEAN_ALLDAY, ""+mAllDay);
         json.put(JSON_NOTE, ""+mNote);

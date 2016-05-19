@@ -50,6 +50,7 @@
                 android:value=".MainActivity"/>
         </activity>
         <activity
+<<<<<<< HEAD
             android:name=".ComputeActivity"
             android:label="Suggest Study Time"
             android:icon="@mipmap/ic_launcher"
@@ -57,6 +58,12 @@
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
 
+=======
+            android:name=".EventListActivity"
+            android:label="TimeManag"
+            android:icon="@mipmap/ic_launcher"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
         </activity>
 
     </application>

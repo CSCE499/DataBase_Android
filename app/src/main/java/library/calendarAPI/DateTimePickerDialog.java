@@ -38,7 +38,7 @@ public class DateTimePickerDialog extends Dialog {
                 int year = mDateTimePicker.get(Calendar.YEAR);
                 int month = (mDateTimePicker.get(Calendar.MONTH) + 1);
                 int day = mDateTimePicker.get(Calendar.DAY_OF_MONTH);
-                int hour = is24HrView ? mDateTimePicker.get(Calendar.HOUR_OF_DAY) : mDateTimePicker.get(Calendar.HOUR_OF_DAY);
+                int hour = is24HrView ? mDateTimePicker.get(Calendar.HOUR_OF_DAY) : mDateTimePicker.get(Calendar.HOUR);
                 int min = mDateTimePicker.get(Calendar.MINUTE);
                 int aa = is24HrView ? -1 : mDateTimePicker.get(Calendar.AM_PM);
                 dateTimeListener.onDateTimeSelected(year, month, day, hour, min, aa);

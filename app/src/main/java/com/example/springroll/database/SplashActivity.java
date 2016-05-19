@@ -29,10 +29,18 @@ public class SplashActivity extends Activity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+<<<<<<< HEAD
         functionsManager = new UserFunctions(this);
         db = new DatabaseHandler(this);
 
 
+=======
+
+        functionsManager = new UserFunctions(this);
+        db = new DatabaseHandler(this);
+
+        /**
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
         final Thread thread = new Thread(new Runnable() {
             public void run() {
                 String provider = db.getUserDetails().get("username");
@@ -50,7 +58,11 @@ public class SplashActivity extends Activity{
                 timeoutLatch.countDown();
             }
         });
+<<<<<<< HEAD
         thread.start();
+=======
+        thread.start();*/
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
         goMain();
 
     }

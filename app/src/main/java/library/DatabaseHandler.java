@@ -19,6 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "capstone2015";
 
+<<<<<<< HEAD
     // Table name
     private static final String TABLE_USER = "user";
     private static final String TABLE_EVENT = "event";
@@ -29,16 +30,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     //User Table Columns namse
+=======
+    // Login table name
+    private static final String TABLE_USER = "user";
+
+    //User Table Columns namse
+
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASWWORD = "password";
     private static final String KEY_CREATED_AT = "created_at";
 
+<<<<<<< HEAD
     /** Table Create Statement. */
     //User Table create statement
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "("
             + KEY_USERNAME + " PRIMARY KEY,"
             + KEY_CREATED_AT + " TEXT" + ")";
 
+=======
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
     public DatabaseHandler(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
@@ -51,7 +62,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d(LOG_TAG, "onCreate");
         //Todo: Don't know yet! but use for create the user schedule
+<<<<<<< HEAD
         db.execSQL(CREATE_TABLE_USER);
+=======
+        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
+                + KEY_USERNAME + " PRIMARY KEY,"
+                + KEY_CREATED_AT + " TEXT" + ")";
+        db.execSQL(CREATE_LOGIN_TABLE);
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
     }
 
     /**
@@ -81,7 +99,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(KEY_USERNAME,username);      //Username
+<<<<<<< HEAD
         values.put(KEY_CREATED_AT, createdAt);      //Created At
+=======
+        values.put(KEY_CREATED_AT,createdAt);      //Created At
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
         //values.put(KEY_PASWWORD,password);    //Password
 
         //Inserting Row
@@ -89,10 +111,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+<<<<<<< HEAD
     public void addScheduleEvent(){
 
     }
 
+=======
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
     /**
      * Getting user data from AWS database
      * @return  return user information with username and password

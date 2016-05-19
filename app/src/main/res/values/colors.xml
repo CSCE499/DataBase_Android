@@ -9,7 +9,11 @@
     <color name="splash_background">#FFFFFF</color>
     <color name="main_background">#FFFFFF</color>
     <color name="authentication_background">#e0ec5f</color>
+<<<<<<< HEAD
     <color name="nav_drawer_background">#e0ed98</color>
+=======
+    <color name="nav_drawer_background">#FFFFFF</color>
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
     <color name="nav_drawer_top_background">#CCCCCC</color>
     <color name="nav_drawer_no_user_background">#AAAAAA</color>
     <color name="error">#f90202</color>

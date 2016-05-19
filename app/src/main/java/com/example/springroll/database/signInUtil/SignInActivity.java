@@ -17,7 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.example.springroll.database.MainActivity;
+=======
+import com.example.springroll.database.BasicActivity;
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
 import com.example.springroll.database.R;
 
 import org.json.JSONException;
@@ -249,7 +253,11 @@ public class SignInActivity extends Activity {
                         /**
                          *If JSON array details are stored in SQlite it launches the User Panel.
                          **/
+<<<<<<< HEAD
                         Intent upanel = new Intent(getApplicationContext(), MainActivity.class);
+=======
+                        Intent upanel = new Intent(getApplicationContext(), BasicActivity.class);
+>>>>>>> b642cffb34a4db2a8810d702f8bbb77eda4c8f6f
                         upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
                         startActivity(upanel);
